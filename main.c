@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <SDL2/SDL.h>
 
 const int SCREEN_WIDTH = 640;
@@ -10,7 +11,7 @@ int main(int argc, char **argv)
 
 	SDL_Surface* surface = NULL;
 
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		printf("SDL could not initialize! SDL_Error: %s\n",
 			SDL_GetError());
@@ -24,21 +25,41 @@ int main(int argc, char **argv)
 			SCREEN_HEIGHT,
 			SDL_WINDOW_SHOWN);
 
-		if(window == NULL)
+		if (window == NULL)
 		{
 			printf("Window could not be created! SDL_Error: %s\n",
 					SDL_GetError());
 		}
 		else
 		{
-			surface = SDL_GetWindowSurface(window);
+			bool quit = false;
+			SDL_Event e;
 
-			SDL_FillRect(surface, NULL,
-				SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
+			while (!quit)
+			{
+				while (SDL_PollEvent(&e) != 0)
+				{
+					switch (e.type)
+					{
+						case SDL_QUIT:
+							quit = true;
+							break;
+						default:
+							break;
+					}
+				}
 
-			SDL_UpdateWindowSurface(window);
+				surface = SDL_GetWindowSurface(window);
 
-			SDL_Delay(3000);
+				SDL_FillRect(surface, NULL,
+					SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
+
+				SDL_UpdateWindowSurface(window);
+
+				SDL_Delay(16);
+
+			}
+
 		}
 	}
 
