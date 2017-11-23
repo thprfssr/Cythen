@@ -5,6 +5,8 @@
 static SDL_Window *MAIN_WINDOW = NULL;
 static SDL_Surface *MAIN_SURFACE = NULL;
 static bool QUIT = false;
+static double DESIRED_FPS = 60;
+static int FRAME_COUNTER = 0;
 
 bool init()
 {
@@ -40,6 +42,11 @@ bool init()
 	return success;
 }
 
+bool load()
+{
+	return true;
+}
+
 void handle_event(SDL_Event event)
 {
 	switch(event.type)
@@ -59,6 +66,10 @@ int main(int argc, char **argv)
 	{
 		printf("Could not initialize!\n");
 	}
+	else if (!load())
+	{
+		printf("Could not load resources!\n");
+	}
 	else
 	{
 		SDL_Event event;
@@ -74,7 +85,8 @@ int main(int argc, char **argv)
 					SDL_MapRGB(MAIN_SURFACE->format, 0x00, 0x00, 0x00));
 			SDL_UpdateWindowSurface(MAIN_WINDOW);
 
-			SDL_Delay(16);
+			FRAME_COUNTER++;
+			SDL_Delay(1000 / DESIRED_FPS);
 		}
 	}
 
