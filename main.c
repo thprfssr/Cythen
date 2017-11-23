@@ -2,68 +2,83 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+static SDL_Window *MAIN_WINDOW = NULL;
+static SDL_Surface *MAIN_SURFACE = NULL;
+static bool QUIT = false;
 
-int main(int argc, char **argv)
+bool init()
 {
-	SDL_Window *window = NULL;
-
-	SDL_Surface* surface = NULL;
+	bool success;
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		printf("SDL could not initialize! SDL_Error: %s\n",
-			SDL_GetError());
+		printf("SDL could not initialize!SDL_Error: %s\n",
+				SDL_GetError());
+		success = false;
 	}
 	else
 	{
-		window = SDL_CreateWindow("Cythen",
-			SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED,
-			SCREEN_WIDTH,
-			SCREEN_HEIGHT,
-			SDL_WINDOW_SHOWN);
+		MAIN_WINDOW = SDL_CreateWindow("Cythen",
+				SDL_WINDOWPOS_UNDEFINED,
+				SDL_WINDOWPOS_UNDEFINED,
+				400, 400,
+				SDL_WINDOW_SHOWN);
 
-		if (window == NULL)
+		if (MAIN_WINDOW == NULL)
 		{
 			printf("Window could not be created! SDL_Error: %s\n",
 					SDL_GetError());
+			success = false;
 		}
 		else
 		{
-			bool quit = false;
-			SDL_Event e;
-
-			while (!quit)
-			{
-				while (SDL_PollEvent(&e) != 0)
-				{
-					switch (e.type)
-					{
-						case SDL_QUIT:
-							quit = true;
-							break;
-						default:
-							break;
-					}
-				}
-
-				surface = SDL_GetWindowSurface(window);
-
-				SDL_FillRect(surface, NULL,
-					SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
-
-				SDL_UpdateWindowSurface(window);
-
-				SDL_Delay(16);
-
-			}
-
+			MAIN_SURFACE = SDL_GetWindowSurface(MAIN_WINDOW);
+			success = true;
 		}
 	}
 
-	SDL_DestroyWindow(window);
+	return success;
+}
+
+void handle_event(SDL_Event event)
+{
+	switch(event.type)
+	{
+		case SDL_QUIT:
+			QUIT = true;
+			break;
+		default:
+			break;
+	}
+}
+
+
+int main(int argc, char **argv)
+{
+	if (!init())
+	{
+		printf("Could not initialize!\n");
+	}
+	else
+	{
+		SDL_Event event;
+
+		while (!QUIT)
+		{
+			while(SDL_PollEvent(&event) != 0)
+			{
+				handle_event(event);
+			}
+
+			SDL_FillRect(MAIN_SURFACE, NULL,
+					SDL_MapRGB(MAIN_SURFACE->format, 0x00, 0x00, 0x00));
+			SDL_UpdateWindowSurface(MAIN_WINDOW);
+
+			SDL_Delay(16);
+		}
+	}
+
+	SDL_DestroyWindow(MAIN_WINDOW);
 	SDL_Quit();
 
 	return 0;
