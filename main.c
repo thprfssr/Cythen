@@ -37,6 +37,8 @@ SDL_Window* open_window()
 		}
 		else
 		{
+			SDL_SetWindowMinimumSize(window, 200, 200);
+
 			int img_flags = IMG_INIT_PNG;
 			if (!(IMG_Init(img_flags) & img_flags))
 			{
