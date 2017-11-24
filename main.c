@@ -41,7 +41,7 @@ SDL_Window* open_window()
 
 SDL_Surface* create_game_screen()
 {
-	SDL_Surface *surface;
+	SDL_Surface *surface = NULL;
 	Uint32 rmask, gmask, bmask, amask;
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -92,8 +92,8 @@ void letterbox(SDL_Surface *src, SDL_Surface *dst)
 	double dst_w = (double) dst->w;
 	double dst_h = (double) dst->h;
 
-	double src_ratio = src_w / dst_h;
-	double dst_ratio = dst_w / src_h;
+	double src_ratio = src_w / src_h;
+	double dst_ratio = dst_w / dst_h;
 
 	double new_w, new_h;
 	int new_x, new_y;
@@ -109,17 +109,17 @@ void letterbox(SDL_Surface *src, SDL_Surface *dst)
 	else if (dst_ratio < src_ratio)
 	{
 		new_w = dst_w;
-		new_h = new_w * src_ratio;
+		new_h = new_w / src_ratio;
 
 		new_x = 0;
-		new_y = (int) round((dst_h - src_h) / 2);
+		new_y = (int) round((dst_h - new_h) / 2);
 	}
 	else if (dst_ratio > src_ratio)
 	{
 		new_h = dst_h;
 		new_w = new_h * src_ratio;
 
-		new_x = (int) round((dst_w - src_w) / 2);
+		new_x = (int) round((dst_w - new_w) / 2);
 		new_y = 0;
 	}
 
@@ -135,9 +135,7 @@ void letterbox(SDL_Surface *src, SDL_Surface *dst)
 int main(int argc, char **argv)
 {
 	SDL_Window *window = open_window();
-
-	SDL_Surface *surface = SDL_GetWindowSurface(window);
-	SDL_Event event;
+	SDL_Surface *surface = NULL;
 
 	SDL_Surface *game_screen = create_game_screen();
 	/* This is the abstract screen for the game, having the
@@ -145,6 +143,7 @@ int main(int argc, char **argv)
 	 * to fit within the window.
 	 */
 
+	SDL_Event event;
 	int frame_counter = 0;
 
 	while (!QUIT)
@@ -154,6 +153,7 @@ int main(int argc, char **argv)
 			handle_event(event);
 		}
 
+		surface = SDL_GetWindowSurface(window);
 		SDL_FillRect(surface, NULL,
 			     SDL_MapRGB(surface->format,
 					0x00, 0x00, 0x00));
