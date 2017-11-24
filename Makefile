@@ -1,6 +1,6 @@
 CC=gcc
 flags = -w -lm -lSDL2 -lSDL2_image
-objects = main.o
+objects = main.o tile.o
 targets = Cythen
 
 all: $(targets)
@@ -9,7 +9,8 @@ all: $(targets)
 Cythen: $(objects)
 	$(CC) $(flags) -o $@ main.o
 
-main.o:
+main.o: game.h
+tile.o:
 
 .PHONY: clean
 clean:

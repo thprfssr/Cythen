@@ -3,10 +3,13 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "game.h"
 
 #define SCREEN_WIDTH 256
 #define SCREEN_HEIGHT 144
 #define DESIRED_FPS 60
+
+#define TILE_ATLAS_PATH "resources/tile_atlas.png"
 
 static bool QUIT = false;
 
@@ -18,7 +21,7 @@ SDL_Window* open_window()
 	{
 		SDL_Log("SDL could not initialize! SDL_Error: %s\n",
 				SDL_GetError());
-		exit(1);
+		end();
 	}
 	else
 	{
@@ -33,7 +36,7 @@ SDL_Window* open_window()
 		{
 			SDL_Log("Window could not be created! SDL_Error: %s\n",
 			       SDL_GetError());
-			exit(1);
+			end();
 		}
 		else
 		{
@@ -44,7 +47,7 @@ SDL_Window* open_window()
 			{
 				SDL_Log("SDL_image could not initialize! SDL_image error: %s\n",
 					IMG_GetError());
-				exit(1);
+				end();
 			}
 		}
 	}
@@ -75,7 +78,7 @@ SDL_Surface* create_game_screen()
 	{
 		SDL_Log("SDL_CreateRGBSurface() failed: %s\n",
 			SDL_GetError());
-		exit(1);
+		end();
 	}
 
 	return surface;
@@ -88,7 +91,7 @@ SDL_Surface* load_resource(char* path)
 	{
 		SDL_Log("Unable to load image %s ! SDL_image error: %s\n",
 			path, IMG_GetError());
-		exit(1);
+		end();
 	}
 
 	return surface;
@@ -99,11 +102,16 @@ void handle_event(SDL_Event event)
 	switch (event.type)
 	{
 		case SDL_QUIT:
-			QUIT = true;
+			end();
 			break;
 		default:
 			break;
 	}
+}
+
+void end()
+{
+	QUIT = true;
 }
 
 /*
@@ -169,7 +177,7 @@ int main(int argc, char **argv)
 	 * to fit within the window.
 	 */
 
-	SDL_Surface *image = load_resource("resources/tile_atlas.png");
+	SDL_Surface *image = load_resource(TILE_ATLAS_PATH);
 
 	SDL_Event event;
 	int frame_counter = 0;
