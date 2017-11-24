@@ -1,5 +1,5 @@
 CC=gcc
-flags = -w -lSDL2 -lm
+flags = -w -lm -lSDL2 -lSDL2_image
 objects = main.o
 targets = Cythen
 

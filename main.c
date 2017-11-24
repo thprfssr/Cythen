@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #define SCREEN_WIDTH 256
 #define SCREEN_HEIGHT 144
@@ -34,6 +35,16 @@ SDL_Window* open_window()
 			       SDL_GetError());
 			exit(1);
 		}
+		else
+		{
+			int img_flags = IMG_INIT_PNG;
+			if (!(IMG_Init(img_flags) & img_flags))
+			{
+				SDL_Log("SDL_image could not initialize! SDL_image error: %s\n",
+					IMG_GetError());
+				exit(1);
+			}
+		}
 	}
 
 	return window;
@@ -62,6 +73,19 @@ SDL_Surface* create_game_screen()
 	{
 		SDL_Log("SDL_CreateRGBSurface() failed: %s\n",
 			SDL_GetError());
+		exit(1);
+	}
+
+	return surface;
+}
+
+SDL_Surface* load_resource(char* path)
+{
+	SDL_Surface *surface = IMG_Load(path);
+	if (surface == NULL)
+	{
+		SDL_Log("Unable to load image %s ! SDL_image error: %s\n",
+			path, IMG_GetError());
 		exit(1);
 	}
 
@@ -143,6 +167,8 @@ int main(int argc, char **argv)
 	 * to fit within the window.
 	 */
 
+	SDL_Surface *image = load_resource("resources/tile_atlas.png");
+
 	SDL_Event event;
 	int frame_counter = 0;
 
@@ -160,7 +186,7 @@ int main(int argc, char **argv)
 		SDL_FillRect(game_screen, NULL,
 			     SDL_MapRGB(game_screen->format,
 					0x00, 0x00, 0xff));
-		letterbox(game_screen, surface);
+		letterbox(image, surface);
 		SDL_UpdateWindowSurface(window);
 
 		frame_counter++;
