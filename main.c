@@ -166,7 +166,7 @@ void letterbox(SDL_Surface *src, SDL_Surface *dst)
 	SDL_BlitScaled(src, NULL, dst, &rect);
 }
 
-int main(int argc, char **argv)
+void play()
 {
 	SDL_Window *window = open_window();
 	SDL_Surface *surface = NULL;
@@ -205,6 +205,10 @@ int main(int argc, char **argv)
 
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+}
 
+int main(int argc, char **argv)
+{
+	play();
 	return 0;
 }

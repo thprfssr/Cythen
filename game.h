@@ -7,5 +7,6 @@ SDL_Surface* load_resource(char* path);
 void handle_event(SDL_Event event);
 void end();
 void letterbox(SDL_Surface* src, SDL_Surface* dst);
+void play();
 
 #endif
