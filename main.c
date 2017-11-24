@@ -34,6 +34,8 @@ SDL_Window* open_window()
 			       SDL_GetError());
 			exit(1);
 		}
+
+		SDL_SetWindowMinimumSize(window, 200, 200);
 	}
 
 	return window;
