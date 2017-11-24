@@ -2,11 +2,9 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
-static SDL_Window *MAIN_WINDOW = NULL;
-static SDL_Surface *MAIN_SURFACE = NULL;
+#define DESIRED_FPS 60
+
 static bool QUIT = false;
-static double DESIRED_FPS = 60;
-static int FRAME_COUNTER = 0;
 
 SDL_Window* open_window()
 {
@@ -20,17 +18,16 @@ SDL_Window* open_window()
 	else
 	{
 		window = SDL_CreateWindow("Cythen",
-				SDL_WINDOWPOS_UNDEFINED,
-				SDL_WINDOWPOS_UNDEFINED,
-				300, 300,
-				SDL_WINDOW_SHOWN);
+					  SDL_WINDOWPOS_UNDEFINED,
+					  SDL_WINDOWPOS_UNDEFINED,
+					  300, 300,
+					  SDL_WINDOW_SHOWN);
 
 		if (window == NULL)
 		{
 			printf("Window could not be created! SDL_Error: %s\n",
-					SDL_GetError());
+			       SDL_GetError());
 		}
-		//MAIN_SURFACE = SDL_GetWindowSurface(MAIN_WINDOW);
 	}
 
 	return window;
@@ -58,6 +55,8 @@ int main(int argc, char **argv)
 		SDL_Surface *surface = SDL_GetWindowSurface(window);
 		SDL_Event event;
 
+		int frame_counter = 0;
+
 		while (!QUIT)
 		{
 			while(SDL_PollEvent(&event) != 0)
@@ -66,10 +65,11 @@ int main(int argc, char **argv)
 			}
 
 			SDL_FillRect(surface, NULL,
-					SDL_MapRGB(surface->format, 0x00, 0x00, 0x00));
+				     SDL_MapRGB(surface->format,
+						0x00, 0x00, 0x00));
 			SDL_UpdateWindowSurface(window);
 
-			FRAME_COUNTER++;
+			frame_counter++;
 			SDL_Delay(1000 / DESIRED_FPS);
 		}
 	}
