@@ -8,43 +8,32 @@ static bool QUIT = false;
 static double DESIRED_FPS = 60;
 static int FRAME_COUNTER = 0;
 
-bool init()
+SDL_Window* open_window()
 {
-	bool success;
+	SDL_Window *window = NULL;
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		printf("SDL could not initialize!SDL_Error: %s\n",
 				SDL_GetError());
-		success = false;
 	}
 	else
 	{
-		MAIN_WINDOW = SDL_CreateWindow("Cythen",
+		window = SDL_CreateWindow("Cythen",
 				SDL_WINDOWPOS_UNDEFINED,
 				SDL_WINDOWPOS_UNDEFINED,
-				400, 400,
+				300, 300,
 				SDL_WINDOW_SHOWN);
 
-		if (MAIN_WINDOW == NULL)
+		if (window == NULL)
 		{
 			printf("Window could not be created! SDL_Error: %s\n",
 					SDL_GetError());
-			success = false;
 		}
-		else
-		{
-			MAIN_SURFACE = SDL_GetWindowSurface(MAIN_WINDOW);
-			success = true;
-		}
+		//MAIN_SURFACE = SDL_GetWindowSurface(MAIN_WINDOW);
 	}
 
-	return success;
-}
-
-bool load()
-{
-	return true;
+	return window;
 }
 
 void handle_event(SDL_Event event)
@@ -62,16 +51,11 @@ void handle_event(SDL_Event event)
 
 int main(int argc, char **argv)
 {
-	if (!init())
+	SDL_Window *window = open_window();
+
+	if(window != NULL)
 	{
-		printf("Could not initialize!\n");
-	}
-	else if (!load())
-	{
-		printf("Could not load resources!\n");
-	}
-	else
-	{
+		SDL_Surface *surface = SDL_GetWindowSurface(window);
 		SDL_Event event;
 
 		while (!QUIT)
@@ -81,16 +65,16 @@ int main(int argc, char **argv)
 				handle_event(event);
 			}
 
-			SDL_FillRect(MAIN_SURFACE, NULL,
-					SDL_MapRGB(MAIN_SURFACE->format, 0x00, 0x00, 0x00));
-			SDL_UpdateWindowSurface(MAIN_WINDOW);
+			SDL_FillRect(surface, NULL,
+					SDL_MapRGB(surface->format, 0x00, 0x00, 0x00));
+			SDL_UpdateWindowSurface(window);
 
 			FRAME_COUNTER++;
 			SDL_Delay(1000 / DESIRED_FPS);
 		}
 	}
 
-	SDL_DestroyWindow(MAIN_WINDOW);
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 
 	return 0;
