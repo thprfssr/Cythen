@@ -21,11 +21,12 @@ SDL_Window* open_window()
 	}
 	else
 	{
+		Uint32 window_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
 		window = SDL_CreateWindow("Cythen",
 					  SDL_WINDOWPOS_UNDEFINED,
 					  SDL_WINDOWPOS_UNDEFINED,
 					  300, 300,
-					  SDL_WINDOW_SHOWN);
+					  window_flags);
 
 		if (window == NULL)
 		{
@@ -158,7 +159,7 @@ int main(int argc, char **argv)
 					0x00, 0x00, 0x00));
 		SDL_FillRect(game_screen, NULL,
 			     SDL_MapRGB(game_screen->format,
-					0xff, 0xff, 0xff));
+					0x00, 0x00, 0xff));
 		letterbox(game_screen, surface);
 		SDL_UpdateWindowSurface(window);
 
