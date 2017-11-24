@@ -14,8 +14,9 @@ SDL_Window* open_window()
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		printf("SDL could not initialize! SDL_Error: %s\n",
+		SDL_Log("SDL could not initialize! SDL_Error: %s\n",
 				SDL_GetError());
+		exit(1);
 	}
 	else
 	{
@@ -27,8 +28,9 @@ SDL_Window* open_window()
 
 		if (window == NULL)
 		{
-			printf("Window could not be created! SDL_Error: %s\n",
+			SDL_Log("Window could not be created! SDL_Error: %s\n",
 			       SDL_GetError());
+			exit(1);
 		}
 	}
 
@@ -79,28 +81,25 @@ int main(int argc, char **argv)
 {
 	SDL_Window *window = open_window();
 
-	if(window != NULL)
-	{
 		SDL_Surface *surface = SDL_GetWindowSurface(window);
 		SDL_Event event;
 
 		int frame_counter = 0;
 
-		while (!QUIT)
+	while (!QUIT)
+	{
+		while(SDL_PollEvent(&event) != 0)
 		{
-			while(SDL_PollEvent(&event) != 0)
-			{
-				handle_event(event);
-			}
-
-			SDL_FillRect(surface, NULL,
-				     SDL_MapRGB(surface->format,
-						0x00, 0x00, 0x00));
-			SDL_UpdateWindowSurface(window);
-
-			frame_counter++;
-			SDL_Delay(1000 / DESIRED_FPS);
+			handle_event(event);
 		}
+
+		SDL_FillRect(surface, NULL,
+			     SDL_MapRGB(surface->format,
+					0x00, 0x00, 0x00));
+		SDL_UpdateWindowSurface(window);
+
+		frame_counter++;
+		SDL_Delay(1000 / DESIRED_FPS);
 	}
 
 	SDL_DestroyWindow(window);
