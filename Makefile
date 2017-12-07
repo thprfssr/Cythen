@@ -9,7 +9,7 @@ all: $(targets)
 Cythen: $(objects)
 	$(CC) $(flags) -o $@ main.o
 
-main.o: game.h
+main.o: window.h
 tile.o:
 
 .PHONY: clean

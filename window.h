@@ -1,5 +1,5 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
 SDL_Window* open_window();
 SDL_Surface* create_game_screen();
