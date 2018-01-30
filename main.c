@@ -11,8 +11,6 @@
 
 #define TILE_ATLAS_PATH "resources/tile_atlas.png"
 
-static bool QUIT = false;
-
 SDL_Window *open_window()
 {
 	SDL_Window *window = NULL;
@@ -20,8 +18,8 @@ SDL_Window *open_window()
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		SDL_Log("SDL could not initialize! SDL_Error: %s\n",
-				SDL_GetError());
-		end();
+			SDL_GetError());
+		exit(-1);
 	}
 	else
 	{
@@ -36,7 +34,7 @@ SDL_Window *open_window()
 		{
 			SDL_Log("Window could not be created! SDL_Error: %s\n",
 			       SDL_GetError());
-			end();
+			exit(-1);
 		}
 		else
 		{
@@ -47,7 +45,7 @@ SDL_Window *open_window()
 			{
 				SDL_Log("SDL_image could not initialize! SDL_image error: %s\n",
 					IMG_GetError());
-				end();
+				exit(-1);
 			}
 		}
 	}
@@ -55,7 +53,7 @@ SDL_Window *open_window()
 	return window;
 }
 
-SDL_Surface *create_game_screen()
+SDL_Surface *create_game_screen(int pixel_width, int pixel_height)
 {
 	SDL_Surface *surface = NULL;
 	Uint32 rmask, gmask, bmask, amask;
@@ -72,26 +70,26 @@ SDL_Surface *create_game_screen()
 	amask = 0xff000000;
 #endif
 
-	surface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32,
+	surface = SDL_CreateRGBSurface(0, pixel_width, pixel_height, 32,
 				       rmask, gmask, bmask, amask);
 	if (surface == NULL)
 	{
 		SDL_Log("SDL_CreateRGBSurface() failed: %s\n",
 			SDL_GetError());
-		end();
+		exit(-1);
 	}
 
 	return surface;
 }
 
-SDL_Surface *load_resource(char* path)
+SDL_Surface *load_resource(char *path)
 {
 	SDL_Surface *surface = IMG_Load(path);
 	if (surface == NULL)
 	{
 		SDL_Log("Unable to load image %s ! SDL_image error: %s\n",
 			path, IMG_GetError());
-		end();
+		exit(-1);
 	}
 
 	return surface;
@@ -102,22 +100,16 @@ void handle_event(SDL_Event event)
 	switch (event.type)
 	{
 		case SDL_QUIT:
-			end();
+			exit(-1);
 			break;
 		default:
 			break;
 	}
 }
 
-void end()
-{
-	QUIT = true;
-}
-
-/*
- * This function scales 'scaled' to its maximum possible size
- * inside 'dst', while preserving the aspect ratio
- * of 'scaled'.
+/* This function scales 'src' to its maximum possible size
+ * inside 'dst', while preserving its aspect ratio,
+ * giving a letterbox effect.
  */
 void letterbox(SDL_Surface *src, SDL_Surface *dst)
 {
@@ -171,7 +163,7 @@ void play()
 	SDL_Window *window = open_window();
 	SDL_Surface *surface = NULL;
 
-	SDL_Surface *game_screen = create_game_screen();
+	SDL_Surface *game_screen = create_game_screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 	/* This is the abstract screen for the game, having the
 	 * proper pixel dimensions. We will scale this surface
 	 * to fit within the window.
@@ -182,7 +174,7 @@ void play()
 	SDL_Event event;
 	int frame_counter = 0;
 
-	while (!QUIT)
+	while (true)
 	{
 		while(SDL_PollEvent(&event) != 0)
 		{
