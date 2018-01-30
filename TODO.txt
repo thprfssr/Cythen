@@ -1,1 +1,2 @@
-> Pull out from main.c the functions which belong to window.c.
+> Make a way to exit safely from the game loop. More specifically, you have to
+	call the functions SDL_DestroyWindow and SDL_Quit
