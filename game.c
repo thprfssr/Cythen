@@ -6,6 +6,8 @@
 #include "window.h"
 #include "game.h"
 
+#include "parser.h"
+
 void handle_event(SDL_Event event)
 {
 	switch (event.type)
@@ -62,5 +64,6 @@ void play()
 int main(int argc, char **argv)
 {
 	play();
+
 	return 0;
 }

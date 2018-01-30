@@ -1,6 +1,6 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-char ***parse_text(FILE *file);
+char *file_to_string(char *filename);
 
 #endif
