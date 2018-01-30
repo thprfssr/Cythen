@@ -63,7 +63,9 @@ void play()
 
 int main(int argc, char **argv)
 {
-	play();
+//	play();
+
+	parse_text("hello world\n");
 
 	return 0;
 }

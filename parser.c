@@ -41,7 +41,28 @@ char *file_to_string(char *filename)
 	return buffer;
 }
 
-char ***parse_text(char *text)
+/* We need this function in order to obtain the layout of the tilemap.
+ * What the function does is take a string as an input, and it tokenizes it
+ * with whitespace, newline, and tab as delimiters. In the end, it returns
+ * an array of strings.
+ */
+char **parse_text(char *text)
 {
-	
+	char **buffer = NULL;
+	char *delimiters = " \n\t";
+	for(int i = 0; ; i++)
+	{
+		char *tmp;
+		tmp = strtok(text, delimiters);
+		if (tmp == NULL)
+		{
+			break;
+		}
+		else
+		{
+			**buffer = (char **)realloc(**buffer, sizeof(tmp));
+			buffer[i] = tmp;
+			printf("%s\n", tmp);
+		}
+	}
 }
