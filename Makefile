@@ -1,6 +1,6 @@
 CC=gcc
 flags = -w -lm -lSDL2 -lSDL2_image
-objects = game.o tile.o window.o csv_parser.o
+objects = game.o window.o
 targets = Cythen
 
 all: $(targets)
@@ -11,8 +11,6 @@ Cythen: $(objects)
 
 game.o: window.h game.h
 window.o: window.h
-tile.o: tiles.h
-csv_parser.o: csv_parser.h
 
 .PHONY: clean
 clean:
