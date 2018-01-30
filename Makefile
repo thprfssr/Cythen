@@ -7,7 +7,7 @@ all: $(targets)
 	make $(targets)
 
 Cythen: $(objects)
-	$(CC) $(flags) -o $@ game.o window.o tile.o csv_parser.o
+	$(CC) $(flags) -o $@ game.o window.o
 
 game.o: window.h game.h
 window.o: window.h
