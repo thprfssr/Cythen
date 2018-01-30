@@ -13,7 +13,7 @@
 
 static bool QUIT = false;
 
-SDL_Window* open_window()
+SDL_Window *open_window()
 {
 	SDL_Window *window = NULL;
 
@@ -55,7 +55,7 @@ SDL_Window* open_window()
 	return window;
 }
 
-SDL_Surface* create_game_screen()
+SDL_Surface *create_game_screen()
 {
 	SDL_Surface *surface = NULL;
 	Uint32 rmask, gmask, bmask, amask;
@@ -84,7 +84,7 @@ SDL_Surface* create_game_screen()
 	return surface;
 }
 
-SDL_Surface* load_resource(char* path)
+SDL_Surface *load_resource(char* path)
 {
 	SDL_Surface *surface = IMG_Load(path);
 	if (surface == NULL)
