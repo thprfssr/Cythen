@@ -1,14 +1,15 @@
 CC=gcc
 flags = -w -lm -lSDL2 -lSDL2_image
-objects = game.o window.o parser.o
+objects = main.o game.o window.o parser.o jc_vector.o
 targets = Cythen
 
 all: $(targets)
 	make $(targets)
 
 Cythen: $(objects)
-	$(CC) $(flags) -o $@ game.o window.o parser.o
+	$(CC) $(flags) -o $@ $(objects)
 
+main.o: game.h
 game.o: window.h game.h
 window.o: window.h
 parser.o: parser.h

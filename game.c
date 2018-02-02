@@ -6,8 +6,6 @@
 #include "window.h"
 #include "game.h"
 
-#include "parser.h"
-
 void handle_event(SDL_Event event)
 {
 	switch (event.type)
@@ -59,13 +57,4 @@ void play()
 
 	SDL_DestroyWindow(window);
 	SDL_Quit();
-}
-
-int main(int argc, char **argv)
-{
-//	play();
-
-	parse_text("hello world\n");
-
-	return 0;
 }
