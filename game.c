@@ -51,7 +51,7 @@ void play()
 			     SDL_MapRGB(game_screen->format,
 					0x00, 0x00, 0xff));
 
-		SDL_Surface *tile = load_tile(tile_atlas, 16);
+		SDL_Surface *tile = load_tile(tile_atlas, 1);
 
 		letterbox(tile, window_surface);
 		SDL_UpdateWindowSurface(window);

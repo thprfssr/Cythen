@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <SDL2/SDL.h>
 #include "tiles.h"
 
@@ -29,3 +30,73 @@ SDL_Surface *load_tile(SDL_Surface *tile_atlas, int tile_position)
 
 	return dst_surface;
 }
+
+int *get_tile_layout(int region_id)
+{
+	char *file_contents;
+	long file_size;
+	FILE *file = NULL;
+	if((file = fopen("regions/0", "r")) == NULL)
+	{
+		printf("Could not open regions file!\n");
+		exit(-1);
+	}
+
+	fseek(file, 0, SEEK_END);
+	file_size = ftell(file);
+	rewind(file);
+	file_contents = malloc(file_size * sizeof(char));
+	fread(file_contents, sizeof(char), file_size, file);
+	fclose(file);
+
+	int *tile_layout;
+	int tile_count = REGION_TILE_WIDTH * REGION_TILE_HEIGHT;
+	tile_layout = malloc(tile_count * sizeof(int));
+
+	char *token;
+	token = strtok(file_contents, REGION_TILE_LAYOUT_DELIMITER);
+	for(int i = 0; token != NULL; i++)
+	{
+		tile_layout[i] = atoi(token);
+		token = strtok(NULL, REGION_TILE_LAYOUT_DELIMITER);
+	}
+
+
+
+/*
+	for(int i = 0; i < tile_count; i++)
+	{
+		tile_layout[i] = atoi(strtok(file_contents, " \n\t"));
+		printf("%i\n", tile_layout[i]);
+	}
+*/
+//	return tile_layout;
+
+
+	//return NULL;
+	
+	return tile_layout;
+}
+
+/*
+#include <string.h>
+#include <stdio.h>
+
+int main () {
+   char str[80] = "This is - www.tutorialspoint.com - website";
+   const char s[2] = "-";
+   char *token;
+
+   get the first token
+   token = strtok(str, s);
+
+   walk through other tokens
+   while( token != NULL ) {
+      printf( " %s\n", token );
+
+      token = strtok(NULL, s);
+   }
+
+   return(0);
+}
+*/
