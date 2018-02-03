@@ -2,6 +2,13 @@
 #include <SDL2/SDL.h>
 #include "tiles.h"
 
+/* NOTE: I am not sure whether this will cause a memory leak due to the fact
+ * that we're not destroying these SDL_Surface's. If a memory leak does happen,
+ * then try to destroy the surface outside the function, right after it is
+ * called (and after you're done doing whatever you need to do with it,
+ * obviously). If that doesn't work, then rewrite the function in such a way
+ * that you don't imprudently create surfaces.
+ */
 SDL_Surface *load_tile(SDL_Surface *tile_atlas, int tile_position)
 {
 	int x_coordinate = tile_position % TILE_ATLAS_WIDTH_IN_TILES;
@@ -100,3 +107,23 @@ int main () {
    return(0);
 }
 */
+
+void draw_region(int region_id, SDL_Surface *game_screen, SDL_Surface *tile_atlas)
+{
+	int *tile_layout = get_tile_layout(region_id);
+
+	SDL_Rect dst_rect;
+	for(int i = 0; i < REGION_TILE_WIDTH * REGION_TILE_HEIGHT; i++)
+	{
+		int x_coordinate = i % REGION_TILE_WIDTH;
+		int y_coordinate = i / REGION_TILE_WIDTH;
+		x_coordinate *= TILE_PIXEL_WIDTH;
+		y_coordinate *= TILE_PIXEL_HEIGHT;
+		dst_rect.x = x_coordinate;
+		dst_rect.y = y_coordinate;
+
+		SDL_Surface *tile = NULL;
+		tile = load_tile(tile_atlas, tile_layout[i]);
+		SDL_BlitSurface(tile, NULL, game_screen, &dst_rect);
+	}
+}

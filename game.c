@@ -32,6 +32,7 @@ void play()
 	SDL_Surface *game_screen = create_game_screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	SDL_Surface *tile_atlas = load_resource(TILE_ATLAS_PATH);
+	//int *tile_layout = get_tile_layout(0);
 
 	SDL_Event event;
 	int frame_counter = 0;
@@ -51,9 +52,9 @@ void play()
 			     SDL_MapRGB(game_screen->format,
 					0x00, 0x00, 0xff));
 
-		SDL_Surface *tile = load_tile(tile_atlas, 1);
+		draw_region(0, game_screen, tile_atlas);
 
-		letterbox(tile, window_surface);
+		letterbox(game_screen, window_surface);
 		SDL_UpdateWindowSurface(window);
 
 		frame_counter++;
