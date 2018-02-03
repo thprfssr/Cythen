@@ -6,6 +6,8 @@
 #include "window.h"
 #include "game.h"
 
+#include "tiles.h"
+
 void handle_event(SDL_Event event)
 {
 	switch (event.type)
@@ -21,7 +23,7 @@ void handle_event(SDL_Event event)
 void play()
 {
 	SDL_Window *window = open_window(GAME_TITLE);
-	SDL_Surface *surface = NULL;
+	SDL_Surface *window_surface = NULL;
 
 	/* This is the representation of the gamescreen. It has the
 	 * proper pixel dimensions. We will scale this surface to
@@ -29,7 +31,7 @@ void play()
 	 */
 	SDL_Surface *game_screen = create_game_screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	SDL_Surface *image = load_resource(TILE_ATLAS_PATH);
+	SDL_Surface *tile_atlas = load_resource(TILE_ATLAS_PATH);
 
 	SDL_Event event;
 	int frame_counter = 0;
@@ -41,14 +43,17 @@ void play()
 			handle_event(event);
 		}
 
-		surface = SDL_GetWindowSurface(window);
-		SDL_FillRect(surface, NULL,
-			     SDL_MapRGB(surface->format,
+		window_surface = SDL_GetWindowSurface(window);
+		SDL_FillRect(window_surface, NULL,
+			     SDL_MapRGB(window_surface->format,
 					0x00, 0x00, 0x00));
 		SDL_FillRect(game_screen, NULL,
 			     SDL_MapRGB(game_screen->format,
 					0x00, 0x00, 0xff));
-		letterbox(image, surface);
+
+		SDL_Surface *tile = load_tile(tile_atlas, 16);
+
+		letterbox(tile, window_surface);
 		SDL_UpdateWindowSurface(window);
 
 		frame_counter++;
