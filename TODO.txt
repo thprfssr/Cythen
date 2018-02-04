@@ -1,3 +1,2 @@
 > Make a way to exit safely from the game loop. More specifically, you have to
 	call the functions SDL_DestroyWindow and SDL_Quit
-> There is a memory leak. Fix it.

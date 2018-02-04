@@ -9,6 +9,7 @@
  * obviously). If that doesn't work, then rewrite the function in such a way
  * that you don't imprudently create surfaces.
  */
+/* NOTE: Whenever you call this function, remember to free the SDL_Surface */
 SDL_Surface *load_tile(SDL_Surface *tile_atlas, int tile_position)
 {
 	int x_coordinate = tile_position % TILE_ATLAS_WIDTH_IN_TILES;
@@ -38,6 +39,8 @@ SDL_Surface *load_tile(SDL_Surface *tile_atlas, int tile_position)
 	return dst_surface;
 }
 
+/* NOTE: Whenever you call this function, remember to free memory afterwards.
+ */
 int *get_tile_layout(int region_id)
 {
 	char *file_contents;
@@ -67,6 +70,8 @@ int *get_tile_layout(int region_id)
 		tile_layout[i] = atoi(token);
 		token = strtok(NULL, REGION_TILE_LAYOUT_DELIMITER);
 	}
+
+	free(file_contents);
 
 
 
@@ -125,5 +130,7 @@ void draw_region(int region_id, SDL_Surface *game_screen, SDL_Surface *tile_atla
 		SDL_Surface *tile = NULL;
 		tile = load_tile(tile_atlas, tile_layout[i]);
 		SDL_BlitSurface(tile, NULL, game_screen, &dst_rect);
+		SDL_FreeSurface(tile);
 	}
+	free(tile_layout);
 }
