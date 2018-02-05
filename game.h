@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <stdbool.h>
 #include <SDL2/SDL.h>
 
 #define GAME_TITLE "Cythen"
@@ -10,6 +11,10 @@
 
 #define TILE_ATLAS_PATH "resources/tile_atlas.png"
 #define TITLE_SCREEN_PATH "resources/title_screen.png"
+
+bool g_is_quitting;
+void quit();
+bool is_quitting();
 
 void handle_event(SDL_Event event);
 void play();

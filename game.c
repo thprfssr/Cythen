@@ -5,16 +5,34 @@
 #include <SDL2/SDL_image.h>
 #include "window.h"
 #include "game.h"
+#include "controls.h"
 
 #include "tiles.h"
+
+bool g_is_quitting = false;
+
+void quit()
+{
+	g_is_quitting = true;
+}
+
+bool is_quitting()
+{
+	return g_is_quitting;
+}
 
 void handle_event(SDL_Event event)
 {
 	switch (event.type)
 	{
 		case SDL_QUIT:
-			exit(-1);
+			quit();
 			break;
+		case SDL_KEYDOWN:
+			handle_input(event.key);
+			break;
+		case SDL_KEYUP:
+			handle_input(event.key);
 		default:
 			break;
 	}
@@ -39,7 +57,7 @@ void play()
 	SDL_Event event;
 	int frame_counter = 0;
 
-	while (true)
+	while (!is_quitting())
 	{
 		while (SDL_PollEvent(&event) != 0)
 		{
