@@ -29,4 +29,6 @@ SDL_Surface *load_tile(SDL_Surface *tile_atlas, int tile_position);
 int *get_tile_layout(int region_id);
 void draw_region(int region_id, SDL_Surface *game_screen, SDL_Surface *tile_atlas);
 
+int get_line_count(char *file_name);
+
 #endif

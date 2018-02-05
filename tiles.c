@@ -90,3 +90,29 @@ void draw_region(int region_id, SDL_Surface *game_screen, SDL_Surface *tile_atla
 	}
 	free(tile_layout);
 }
+
+int get_line_count(char *file_name)
+{
+	FILE *file = NULL;
+	file = fopen(file_name, "r");
+	if (file == NULL)
+	{
+		printf("Could not open file!\n");
+		exit(-1);
+	}
+
+	char ch;
+	int i = 0;
+	while (!feof(file))
+	{
+		ch = fgetc(file);
+		if(ch == '\n')
+		{
+			i++;
+		}
+	}
+
+	fclose(file);
+
+	return i;
+}
