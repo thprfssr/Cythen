@@ -33,9 +33,14 @@ SDL_Surface *load_tile(SDL_Surface *tile_atlas, int tile_position)
 }
 
 /* NOTE: Whenever you call this function,
- * remember to free memory afterwards. */
-int *get_tile_layout(int region_id)
+ * remember to destroy the region afterwards. */
+/* NOTE: This function almost made me insane when I was debugging it.
+ * Therefore, it's quite messy, so remember to clean it up in the future. */
+region_t *create_region(int region_id, SDL_Surface *tile_atlas)
 {
+	region_t *region = malloc(sizeof(region_t));
+	region->id = region_id;
+
 	char *file_contents;
 	long file_size;
 	FILE *file = NULL;
@@ -50,55 +55,69 @@ int *get_tile_layout(int region_id)
 	rewind(file);
 	file_contents = malloc(file_size * sizeof(char));
 	fread(file_contents, sizeof(char), file_size, file);
-	fclose(file);
+	rewind(file);
 
-	int *tile_layout;
-	int tile_count = REGION_TILE_WIDTH * REGION_TILE_HEIGHT;
-	tile_layout = malloc(tile_count * sizeof(int));
-
+	int *tile_layout = NULL;
+	size_t size = 0;
 	char *token;
 	token = strtok(file_contents, REGION_TILE_LAYOUT_DELIMITER);
-	for(int i = 0; token != NULL; i++)
+	int i = 0;
+	while (token != NULL)
 	{
+		size += sizeof(int);
+		tile_layout = realloc(tile_layout, size);
 		tile_layout[i] = atoi(token);
 		token = strtok(NULL, REGION_TILE_LAYOUT_DELIMITER);
+		i++;
 	}
 
+	region->height = get_line_count(file);
+	region->width = i / region->height;
+	region->layout = tile_layout;
+
+	int region_pixel_width = region->width * TILE_PIXEL_WIDTH;
+	int region_pixel_height = region->height * TILE_PIXEL_HEIGHT;
+	region->surface = SDL_CreateRGBSurface(0, region_pixel_width,
+					      region_pixel_height,
+					      32, 0, 0, 0, 0);
+	draw_region(region, tile_atlas);
+
+	fclose(file);
 	free(file_contents);
 	
-	return tile_layout;
+	return region;
 }
 
-void draw_region(int region_id, SDL_Surface *game_screen, SDL_Surface *tile_atlas)
+void draw_region(region_t *region, SDL_Surface *tile_atlas)
 {
-	int *tile_layout = get_tile_layout(region_id);
-
 	SDL_Rect dst_rect;
-	for(int i = 0; i < REGION_TILE_WIDTH * REGION_TILE_HEIGHT; i++)
+	for(int i = 0; i < region->width * region->height; i++)
 	{
-		int x_coordinate = i % REGION_TILE_WIDTH;
-		int y_coordinate = i / REGION_TILE_WIDTH;
+		int x_coordinate = i % region->width;
+		int y_coordinate = i / region->width;
 		x_coordinate *= TILE_PIXEL_WIDTH;
 		y_coordinate *= TILE_PIXEL_HEIGHT;
 		dst_rect.x = x_coordinate;
 		dst_rect.y = y_coordinate;
 
 		SDL_Surface *tile = NULL;
-		tile = load_tile(tile_atlas, tile_layout[i]);
-		SDL_BlitSurface(tile, NULL, game_screen, &dst_rect);
+		tile = load_tile(tile_atlas, region->layout[i]);
+		SDL_BlitSurface(tile, NULL, region->surface, &dst_rect);
 		SDL_FreeSurface(tile);
 	}
-	free(tile_layout);
 }
 
-int get_line_count(char *file_name)
+void destroy_region(region_t *region)
 {
-	FILE *file = NULL;
-	file = fopen(file_name, "r");
+	free(region->layout);
+	SDL_FreeSurface(region->surface);
+}
+
+int get_line_count(FILE *file)
+{
 	if (file == NULL)
 	{
-		printf("Could not open file!\n");
-		exit(-1);
+		printf("File is NULL!\n");
 	}
 
 	char ch;
@@ -111,8 +130,6 @@ int get_line_count(char *file_name)
 			i++;
 		}
 	}
-
-	fclose(file);
 
 	return i;
 }

@@ -1,8 +1,6 @@
-> Make a way to exit safely from the game loop. More specifically, you have to
-	call the functions SDL_DestroyWindow and SDL_Quit.
 > Regions don't have to be the same size as the gamescreen. You can have larger
 	regions, and have the gamescreen move through them. So fix that.
-> Work on the controls.
+> For the game loop, use deltas for better timekeeping
 > Work on the titlescreen.
 > Work on the battlescreen.
 > Work on sprite movement.

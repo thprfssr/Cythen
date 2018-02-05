@@ -49,8 +49,8 @@ void play()
 	SDL_Surface *game_screen = create_game_screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	SDL_Surface *tile_atlas = load_resource(TILE_ATLAS_PATH);
-	
 	SDL_Surface *title_screen = load_resource(TITLE_SCREEN_PATH);
+	region_t *region = create_region(0, tile_atlas);
 
 	SDL_Event event;
 	int frame_counter = 0;
@@ -70,16 +70,18 @@ void play()
 			     SDL_MapRGB(game_screen->format,
 					0x00, 0x00, 0xff));
 
-		draw_region(0, game_screen, tile_atlas);
+		//draw_region(0, game_screen, tile_atlas);
 
-		letterbox(game_screen, window_surface);
+		//letterbox(game_screen, window_surface);
 		//letterbox(title_screen, window_surface);
+		letterbox(region->surface, window_surface);
 		SDL_UpdateWindowSurface(window);
 
 		frame_counter++;
 		SDL_Delay(1000 / DESIRED_FPS);
 	}
 
+	destroy_region(region);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
