@@ -2,13 +2,6 @@
 #include <SDL2/SDL.h>
 #include "tiles.h"
 
-/* NOTE: I am not sure whether this will cause a memory leak due to the fact
- * that we're not destroying these SDL_Surface's. If a memory leak does happen,
- * then try to destroy the surface outside the function, right after it is
- * called (and after you're done doing whatever you need to do with it,
- * obviously). If that doesn't work, then rewrite the function in such a way
- * that you don't imprudently create surfaces.
- */
 /* NOTE: Whenever you call this function, remember to free the SDL_Surface */
 SDL_Surface *load_tile(SDL_Surface *tile_atlas, int tile_position)
 {
@@ -39,8 +32,8 @@ SDL_Surface *load_tile(SDL_Surface *tile_atlas, int tile_position)
 	return dst_surface;
 }
 
-/* NOTE: Whenever you call this function, remember to free memory afterwards.
- */
+/* NOTE: Whenever you call this function,
+ * remember to free memory afterwards. */
 int *get_tile_layout(int region_id)
 {
 	char *file_contents;
@@ -72,46 +65,9 @@ int *get_tile_layout(int region_id)
 	}
 
 	free(file_contents);
-
-
-
-/*
-	for(int i = 0; i < tile_count; i++)
-	{
-		tile_layout[i] = atoi(strtok(file_contents, " \n\t"));
-		printf("%i\n", tile_layout[i]);
-	}
-*/
-//	return tile_layout;
-
-
-	//return NULL;
 	
 	return tile_layout;
 }
-
-/*
-#include <string.h>
-#include <stdio.h>
-
-int main () {
-   char str[80] = "This is - www.tutorialspoint.com - website";
-   const char s[2] = "-";
-   char *token;
-
-   get the first token
-   token = strtok(str, s);
-
-   walk through other tokens
-   while( token != NULL ) {
-      printf( " %s\n", token );
-
-      token = strtok(NULL, s);
-   }
-
-   return(0);
-}
-*/
 
 void draw_region(int region_id, SDL_Surface *game_screen, SDL_Surface *tile_atlas)
 {

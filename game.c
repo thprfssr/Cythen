@@ -45,12 +45,10 @@ void play()
 
 	/* This is the representation of the gamescreen. It has the
 	 * proper pixel dimensions. We will scale this surface to
-	 * fit within the window.
-	 */
+	 * fit within the window. */
 	SDL_Surface *game_screen = create_game_screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	SDL_Surface *tile_atlas = load_resource(TILE_ATLAS_PATH);
-	//int *tile_layout = get_tile_layout(0);
 	
 	SDL_Surface *title_screen = load_resource(TITLE_SCREEN_PATH);
 
@@ -72,10 +70,10 @@ void play()
 			     SDL_MapRGB(game_screen->format,
 					0x00, 0x00, 0xff));
 
-		//draw_region(0, game_screen, tile_atlas);
+		draw_region(0, game_screen, tile_atlas);
 
-		//letterbox(game_screen, window_surface);
-		letterbox(title_screen, window_surface);
+		letterbox(game_screen, window_surface);
+		//letterbox(title_screen, window_surface);
 		SDL_UpdateWindowSurface(window);
 
 		frame_counter++;

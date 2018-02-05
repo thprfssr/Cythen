@@ -14,6 +14,17 @@
 
 #define REGION_TILE_LAYOUT_DELIMITER " \n\t"
 
+typedef struct
+{
+	int id;
+	int width_in_tiles;
+	int height_in_tiles;
+	int *layout;
+	SDL_Surface surface;
+} region_t;
+
+void destroy_region(region_t region);
+
 SDL_Surface *load_tile(SDL_Surface *tile_atlas, int tile_position);
 int *get_tile_layout(int region_id);
 void draw_region(int region_id, SDL_Surface *game_screen, SDL_Surface *tile_atlas);
