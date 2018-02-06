@@ -28,4 +28,5 @@ SDL_Surface *load_tile(SDL_Surface *tile_atlas, int tile_position);
 
 int get_line_count(FILE *file);
 
+
 #endif

@@ -16,7 +16,7 @@ void button_released(int button)
 
 bool is_button_pressed(int button)
 {
-	return (bool) g_controller_status & button;
+	return g_controller_status & button;
 }
 
 void handle_input(SDL_KeyboardEvent event)
@@ -65,7 +65,7 @@ void handle_input(SDL_KeyboardEvent event)
 				break;
 		}
 	}
-	else
+	else if (event.type == SDL_KEYUP)
 	{
 		switch (event.keysym.scancode)
 		{

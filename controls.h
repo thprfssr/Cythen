@@ -1,9 +1,10 @@
 #ifndef CONTROLS_H
 #define CONTROLS_H
 
+#include <stdbool.h>
 #include <SDL2/SDL.h>
 
-/* Each of these preprocessor directives defines a single biot,
+/* Each of these preprocessor directives defines a single bit,
  * corresponding to one button on the abstract controller.
  */
 #define BUTTON_UP	(1 << 0)

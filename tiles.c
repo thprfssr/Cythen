@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
+#include "game.h"
 #include "tiles.h"
 
 /* NOTE: Whenever you call this function, remember to free the SDL_Surface */

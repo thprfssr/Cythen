@@ -6,6 +6,7 @@
 #include "window.h"
 #include "game.h"
 #include "controls.h"
+#include "camera.h"
 
 #include "tiles.h"
 
@@ -55,6 +56,7 @@ void play()
 	SDL_Event event;
 	int frame_counter = 0;
 
+	int x, y;
 	while (!is_quitting())
 	{
 		while (SDL_PollEvent(&event) != 0)
@@ -72,9 +74,13 @@ void play()
 
 		//draw_region(0, game_screen, tile_atlas);
 
-		//letterbox(game_screen, window_surface);
+		move_camera();
+		x = get_camera_x();
+		y = get_camera_y();
+		camera_view(region->surface, game_screen, x, y);
+		letterbox(game_screen, window_surface);
 		//letterbox(title_screen, window_surface);
-		letterbox(region->surface, window_surface);
+		//letterbox(region->surface, window_surface);
 		SDL_UpdateWindowSurface(window);
 
 		frame_counter++;
