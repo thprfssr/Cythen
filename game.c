@@ -84,6 +84,10 @@ void play()
 		{
 			letterbox(title_screen, window_surface);
 		}
+		else if (is_button_pressed(BUTTON_SELECT))
+		{
+			quit();
+		}
 		else
 		{
 			is_on_title = false;
