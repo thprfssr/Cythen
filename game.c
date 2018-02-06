@@ -57,6 +57,7 @@ void play()
 	int frame_counter = 0;
 
 	int x, y;
+	bool is_on_title = true;
 	while (!is_quitting())
 	{
 		while (SDL_PollEvent(&event) != 0)
@@ -78,7 +79,18 @@ void play()
 		x = get_camera_x();
 		y = get_camera_y();
 		camera_view(region->surface, game_screen, x, y);
-		letterbox(game_screen, window_surface);
+
+		if (is_on_title && !is_button_pressed(BUTTON_START))
+		{
+			letterbox(title_screen, window_surface);
+		}
+		else
+		{
+			is_on_title = false;
+			letterbox(game_screen, window_surface);
+		}
+
+		//letterbox(game_screen, window_surface);
 		//letterbox(title_screen, window_surface);
 		//letterbox(region->surface, window_surface);
 		SDL_UpdateWindowSurface(window);
