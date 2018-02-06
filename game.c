@@ -74,7 +74,7 @@ void play()
 
 		//draw_region(0, game_screen, tile_atlas);
 
-		move_camera();
+		move_camera(region);
 		x = get_camera_x();
 		y = get_camera_y();
 		camera_view(region->surface, game_screen, x, y);

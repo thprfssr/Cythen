@@ -1,7 +1,9 @@
+#include <stdbool.h>
 #include <SDL2/SDL.h>
 #include "game.h"
 #include "camera.h"
 #include "controls.h"
+#include "tiles.h"
 
 int g_camera_x_coordinate = 0;
 int g_camera_y_coordinate = 0;
@@ -22,17 +24,19 @@ void set_camera_position(int x, int y)
 	g_camera_y_coordinate = y;
 }
 
-void move_camera()
+void move_camera(region_t *region)
 {
 	int x = get_camera_x();
 	int y = get_camera_y();
-	if (is_button_pressed(BUTTON_UP))
+	int w = region->width * TILE_PIXEL_WIDTH;
+	int h = region->height * TILE_PIXEL_HEIGHT;
+	if (is_button_pressed(BUTTON_UP) && y > 0)
 		y--;
-	if (is_button_pressed(BUTTON_DOWN))
+	if (is_button_pressed(BUTTON_DOWN) && y + SCREEN_HEIGHT < h)
 		y++;
-	if (is_button_pressed(BUTTON_LEFT))
+	if (is_button_pressed(BUTTON_LEFT) && x > 0)
 		x--;
-	if (is_button_pressed(BUTTON_RIGHT))
+	if (is_button_pressed(BUTTON_RIGHT) && x + SCREEN_WIDTH < w)
 		x++;
 	
 	set_camera_position(x, y);
