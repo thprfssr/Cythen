@@ -9,9 +9,6 @@
 
 #define TILE_ATLAS_WIDTH_IN_TILES 16
 
-#define REGION_TILE_WIDTH 16
-#define REGION_TILE_HEIGHT 9
-
 #define REGION_TILE_LAYOUT_DELIMITER " \n\t"
 
 typedef struct
