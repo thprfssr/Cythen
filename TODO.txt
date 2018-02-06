@@ -1,6 +1,3 @@
-> The camera, it should not move past the borders of the region. so fix it.
-> Regions don't have to be the same size as the gamescreen. You can have larger
-	regions, and have the gamescreen move through them. So fix that.
 > For the game loop, use deltas for better timekeeping
 > Work on the titlescreen.
 > Work on the battlescreen.
