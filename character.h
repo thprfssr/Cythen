@@ -3,12 +3,12 @@
 
 typedef struct
 {
-	int id;
-	char *name;
 	int x;
 	int y;
 	int w;
 	int h;
-} character;
+} character_t;
+
+character_t character_init(int x, int y, int w, int h);
 
 #endif

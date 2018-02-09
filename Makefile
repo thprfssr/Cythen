@@ -1,6 +1,6 @@
 CC=gcc
 flags = -w -lm -lSDL2 -lSDL2_image
-objects = main.o game.o window.o tiles.o controls.o camera.o
+objects = main.o game.o window.o tiles.o controls.o camera.o character.o
 targets = Cythen
 
 all: $(targets)
@@ -14,6 +14,7 @@ game.o: window.h game.h tiles.h camera.h
 window.o: window.h
 tiles.o: game.h tiles.h
 controls.o: controls.h
+character.o: character.h
 
 .PHONY: clean
 clean:
