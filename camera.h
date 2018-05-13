@@ -13,4 +13,9 @@ int get_camera_y();
 void set_camera_position(int x, int y);
 void move_camera(region_t *region);
 
+bool is_camera_colliding_up(region_t *region);
+bool is_camera_colliding_down(region_t *region);
+bool is_camera_colliding_left(region_t *region);
+bool is_camera_colliding_right(region_t *region);
+
 #endif

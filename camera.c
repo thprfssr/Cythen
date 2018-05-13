@@ -24,6 +24,28 @@ void set_camera_position(int x, int y)
 	g_camera_y_coordinate = y;
 }
 
+bool is_camera_colliding_up(region_t *region)
+{
+	return g_camera_y_coordinate == 0;
+}
+
+bool is_camera_colliding_down(region_t *region)
+{
+	return g_camera_y_coordinate + SCREEN_HEIGHT
+		== region->height * TILE_PIXEL_HEIGHT;
+}
+
+bool is_camera_colliding_left(region_t *region)
+{
+	return g_camera_x_coordinate == 0;
+}
+
+bool is_camera_colliding_right(region_t *region)
+{
+	return g_camera_x_coordinate + SCREEN_WIDTH
+		== region->width * TILE_PIXEL_WIDTH;
+}
+
 void move_camera(region_t *region)
 {
 	int x = get_camera_x();
