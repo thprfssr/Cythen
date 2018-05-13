@@ -7,6 +7,7 @@
 #include "game.h"
 #include "controls.h"
 #include "camera.h"
+#include "character.h"
 
 #include "tiles.h"
 
@@ -52,6 +53,7 @@ void play()
 	SDL_Surface *tile_atlas = load_resource(TILE_ATLAS_PATH);
 	SDL_Surface *title_screen = load_resource(TITLE_SCREEN_PATH);
 	region_t *region = create_region(0, tile_atlas);
+	character_t *protagonist = character_init(100, 60, 16, 16);
 
 	SDL_Event event;
 	int frame_counter = 0;
@@ -79,6 +81,10 @@ void play()
 		x = get_camera_x();
 		y = get_camera_y();
 		camera_view(region->surface, game_screen, x, y);
+		
+		draw_region(region, tile_atlas);
+		control_character(protagonist);
+		draw_character(protagonist, region);
 
 		if (is_on_title && !is_button_pressed(BUTTON_START))
 		{
