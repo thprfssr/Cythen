@@ -9,7 +9,7 @@ typedef struct
 	int h;
 } character_t;
 
-character_t *character_init(int x, int y, int w, int h);
+character_t *create_character(int x, int y, int w, int h);
 void draw_character(character_t *character, region_t *region);
 
 void move_character_up(character_t *character);

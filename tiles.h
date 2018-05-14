@@ -18,6 +18,7 @@ typedef struct
 	int height;
 	int *layout;
 	SDL_Surface *surface;
+	SDL_Surface *foreground;
 } region_t;
 
 region_t *create_region(int region_id, SDL_Surface *tile_atlas);

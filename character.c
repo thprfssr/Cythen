@@ -3,7 +3,7 @@
 #include "character.h"
 #include "controls.h"
 
-character_t *character_init(int x, int y, int h, int w)
+character_t *create_character(int x, int y, int h, int w)
 {
 	character_t *character = malloc(sizeof(character_t));
 	character->x = x;
@@ -25,16 +25,7 @@ void draw_character(character_t *character, region_t *region)
 	SDL_FillRect(region->surface, rect, SDL_MapRGB(region->surface->format,
 						       0x00, 0x00, 0x00));
 
-	//SDL_FillRect(region->surface, NULL, SDL_MapRGB(region->surface->format,
-	//					       0x00, 0x00, 0x00));
-	/*
-	SDL_FillRect(window_surface, NULL,
-			     SDL_MapRGB(window_surface->format,
-					0x00, 0x00, 0x00));
-		SDL_FillRect(game_screen, NULL,
-			     SDL_MapRGB(game_screen->format,
-					0x00, 0x00, 0xff));	
-					*/
+
 }
 
 void move_character_up(character_t *character)

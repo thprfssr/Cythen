@@ -3,6 +3,14 @@
 #include "game.h"
 #include "tiles.h"
 
+/* DISCUSSION: Each character is responsible for drawing itself in its region.
+ * However, they draw themselves on a "dynamic layer" of the region. This is
+ * nothing more than a transparent surface that will be overlayed over the
+ * tiles of the region. And thus, the camera will show first the region tiles,
+ * and then the dynamic surface.
+ * Thus, each character has a region associated with it (and not the other way
+ * around), but he is responsible for drawing himself in his region. */
+
 /* NOTE: Whenever you call this function, remember to free the SDL_Surface */
 SDL_Surface *load_tile(SDL_Surface *tile_atlas, int tile_position)
 {
@@ -82,6 +90,10 @@ region_t *create_region(int region_id, SDL_Surface *tile_atlas)
 					      region_pixel_height,
 					      32, 0, 0, 0, 0);
 	draw_region(region, tile_atlas);
+
+	region->foreground = SDL_CreateRGBSurface(0, region_pixel_width,
+						  region_pixel_height,
+						  32, 0, 0, 0, 0);
 
 	fclose(file);
 	free(file_contents);
