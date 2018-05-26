@@ -120,6 +120,12 @@ void draw_region(region_t *region, SDL_Surface *tile_atlas)
 	}
 }
 
+void clear_foreground(region_t *region)
+{
+	SDL_FillRect(region->foreground, NULL,
+		     SDL_MapRGBA(region->foreground->format, 0, 0, 0, 0xFF));
+}
+
 void destroy_region(region_t *region)
 {
 	free(region->layout);
