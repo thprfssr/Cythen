@@ -89,6 +89,10 @@ void play()
 		//control_character(protagonist);
 		//draw_character(protagonist, region);
 		
+		draw_region(region, tile_atlas);
+		draw_character(character, region);
+		control_character(character);
+		
 		camera_view(camera, game_screen);
 
 		if (is_on_title && !is_button_pressed(BUTTON_START))
