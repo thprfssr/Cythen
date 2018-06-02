@@ -86,14 +86,21 @@ region_t *create_region(int region_id, SDL_Surface *tile_atlas)
 
 	int region_pixel_width = region->width * TILE_PIXEL_WIDTH;
 	int region_pixel_height = region->height * TILE_PIXEL_HEIGHT;
-	region->surface = SDL_CreateRGBSurface(0, region_pixel_width,
+	region->background = SDL_CreateRGBSurface(0, region_pixel_width,
 					      region_pixel_height,
 					      32, 0, 0, 0, 0);
-	draw_region(region, tile_atlas);
+	draw_region_background(region, tile_atlas);
 
-	region->foreground = SDL_CreateRGBSurface(0, region_pixel_width,
+	/* region->foreground = SDL_CreateRGBSurface(0, region_pixel_width,
 						  region_pixel_height,
-						  32, 0, 0, 0, 0);
+						  32, 0, 0, 0, 0xFF); */
+
+	region->ground = SDL_CreateRGBSurface(0, region_pixel_width,
+					      region_pixel_height,
+					      32, 0, 0, 0, 0);
+
+	//update_region(region);
+	//clear_region(region);
 
 	fclose(file);
 	free(file_contents);
@@ -101,7 +108,7 @@ region_t *create_region(int region_id, SDL_Surface *tile_atlas)
 	return region;
 }
 
-void draw_region(region_t *region, SDL_Surface *tile_atlas)
+void draw_region_background(region_t *region, SDL_Surface *tile_atlas)
 {
 	SDL_Rect dst_rect;
 	for(int i = 0; i < region->width * region->height; i++)
@@ -115,21 +122,40 @@ void draw_region(region_t *region, SDL_Surface *tile_atlas)
 
 		SDL_Surface *tile = NULL;
 		tile = load_tile(tile_atlas, region->layout[i]);
-		SDL_BlitSurface(tile, NULL, region->surface, &dst_rect);
+		SDL_BlitSurface(tile, NULL, region->background, &dst_rect);
 		SDL_FreeSurface(tile);
 	}
 }
 
+/*
 void clear_foreground(region_t *region)
 {
 	SDL_FillRect(region->foreground, NULL,
 		     SDL_MapRGBA(region->foreground->format, 0, 0, 0, 0xFF));
 }
+*/
+
+/* This function draws the background and foreground on the ground surface. */
+//void update_region(region_t *region)
+//{
+	/*
+	SDL_SetSurfaceBlendMode(region->foreground, SDL_BLENDMODE_BLEND);
+	SDL_SetSurfaceBlendMode(region->ground, SDL_BLENDMODE_BLEND);
+	*/
+//	SDL_BlitSurface(region->background, NULL, region->ground, NULL);
+	//SDL_BlitSurface(region->foreground, NULL, region->ground, NULL);
+//}
+
+void clear_region(region_t *region)
+{
+	SDL_BlitSurface(region->background, NULL, region->ground, NULL);
+}
 
 void destroy_region(region_t *region)
 {
 	free(region->layout);
-	SDL_FreeSurface(region->surface);
+	SDL_FreeSurface(region->background);
+	SDL_FreeSurface(region->ground);
 }
 
 int get_line_count(FILE *file)

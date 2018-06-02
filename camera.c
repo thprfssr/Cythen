@@ -144,7 +144,8 @@ void camera_view(camera_t *camera, SDL_Surface *game_screen)
 	rect->w = SCREEN_WIDTH;
 	rect->h = SCREEN_HEIGHT;
 
-	SDL_BlitSurface(camera->region->surface, rect, game_screen, NULL);
+	SDL_BlitSurface(camera->region->ground, rect, game_screen, NULL);
+	//printf("%s\n", SDL_GetError());
 }
 
 

@@ -89,7 +89,9 @@ void play()
 		//control_character(protagonist);
 		//draw_character(protagonist, region);
 		
-		draw_region(region, tile_atlas);
+		//draw_region_background(region, tile_atlas);
+		//update_region(region);
+		clear_region(region);
 		draw_character(character, region);
 		control_character(character);
 		

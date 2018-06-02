@@ -22,7 +22,7 @@ void draw_character(character_t *character, region_t *region)
 	rect->h = character->h;
 	rect->w = character->w;
 
-	SDL_FillRect(region->surface, rect, SDL_MapRGB(region->surface->format,
+	SDL_FillRect(region->ground, rect, SDL_MapRGB(region->ground->format,
 						       0x00, 0x00, 0x00));
 
 

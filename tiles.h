@@ -17,12 +17,17 @@ typedef struct
 	int width;
 	int height;
 	int *layout;
-	SDL_Surface *surface;
-	SDL_Surface *foreground;
+	SDL_Surface *background; //This is where the tiles are drawn.
+	//SDL_Surface *foreground; //This is where the entities go.
+	SDL_Surface *ground;
+	/* The ground is the surface shown to the player, being the surface in
+	 * which both the background and foreground are shown. */
 } region_t;
 
 region_t *create_region(int region_id, SDL_Surface *tile_atlas);
-void draw_region(region_t *region, SDL_Surface *tile_atlas);
+void draw_region_background(region_t *region, SDL_Surface *tile_atlas);
+//void update_region(region_t *region);
+void clear_region(region_t *region);
 void destroy_region(region_t *region);
 
 SDL_Surface *load_tile(SDL_Surface *tile_atlas, int tile_position);
