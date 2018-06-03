@@ -1,7 +1,7 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#define CHARACTER_SPEED (1.791)
+#define CHARACTER_SPEED (1.5)
 
 typedef struct
 {
