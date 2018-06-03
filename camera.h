@@ -30,6 +30,7 @@ camera_t *create_camera(region_t *region, int x, int y, character_t *character);
 void move_camera(camera_t *camera, int direction);
 //void update_camera_collision(camera_t *camera);
 bool camera_collision(camera_t *camera, int direction);
+bool camera_infringes(camera_t *camera, int direction);
 void camera_view(camera_t *camera, SDL_Surface *game_screen);
 void center_camera(camera_t *camera);
 

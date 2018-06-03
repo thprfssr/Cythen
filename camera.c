@@ -113,9 +113,9 @@ bool camera_collision(camera_t *camera, int direction)
 	 * against the region, and it puts that information in the collision
 	 * bit field. */
 	(y <= 0) ? (collision |= UP) : (collision &= ~UP);
-	(y + hs == hr) ? (collision |= DOWN) : (collision &= ~DOWN);
+	(y + hs >= hr) ? (collision |= DOWN) : (collision &= ~DOWN);
 	(x <= 0) ? (collision |= LEFT) : (collision &= ~LEFT);
-	(x + ws == wr) ? (collision |= RIGHT) : (collision &= ~RIGHT);
+	(x + ws >= wr) ? (collision |= RIGHT) : (collision &= ~RIGHT);
 
 	/* And now we return a boolean value for whichever case was passed into
 	 * the function through the int direction. */
@@ -133,6 +133,45 @@ bool camera_collision(camera_t *camera, int direction)
 			return false;
 	}
 }
+
+/* This function returns true whenever the camera is strictly past
+ * the region boundaries. */
+bool camera_infringes(camera_t *camera, int direction)
+{
+	/* Just declaring these for simplicity. */
+	int x = camera->x;
+	int y = camera->y;
+	int hs = SCREEN_HEIGHT;
+	int ws = SCREEN_WIDTH;
+	int hr = camera->region->height * TILE_PIXEL_HEIGHT;
+	int wr = camera->region->width * TILE_PIXEL_WIDTH;
+	int collision = 0;
+
+	/* This takes care of deciding which side of the camera is colliding
+	 * against the region, and it puts that information in the collision
+	 * bit field. */
+	(y < 0) ? (collision |= UP) : (collision &= ~UP);
+	(y + hs > hr) ? (collision |= DOWN) : (collision &= ~DOWN);
+	(x < 0) ? (collision |= LEFT) : (collision &= ~LEFT);
+	(x + ws > wr) ? (collision |= RIGHT) : (collision &= ~RIGHT);
+
+	/* And now we return a boolean value for whichever case was passed into
+	 * the function through the int direction. */
+	switch (direction)
+	{
+		case UP:
+			return collision & UP;
+		case DOWN:
+			return collision & DOWN;
+		case LEFT:
+			return collision & LEFT;
+		case RIGHT:
+			return collision & RIGHT;
+		default:
+			return false;
+	}
+}
+
 
 /* This function draws on the game screen the portion of the region that the
  * camera currently sees. */
@@ -156,8 +195,8 @@ void center_camera(camera_t *camera)
 	 * and the character. */
 	int cam_x = camera->x + SCREEN_WIDTH / 2;
 	int cam_y = camera->y + SCREEN_HEIGHT / 2;
-	int char_x = ((int) floor(camera->character->x)) + camera->character->w / 2;
-	int char_y = ((int) floor(camera->character->y)) + camera->character->h / 2;
+	int char_x = ((int) ceil(camera->character->x)) + camera->character->w / 2;
+	int char_y = ((int) ceil(camera->character->y)) + camera->character->h / 2;
 
 	/* If the character is left of the camera center... */
 	while (char_x < cam_x && !camera_collision(camera, LEFT))
@@ -174,6 +213,15 @@ void center_camera(camera_t *camera)
 
 	camera->x = cam_x - SCREEN_WIDTH / 2;
 	camera->y = cam_y - SCREEN_HEIGHT / 2;
+
+	while (camera_infringes(camera, UP))
+		camera->y++;
+	while (camera_infringes(camera, DOWN))
+		camera->y--;
+	while (camera_infringes(camera, LEFT))
+		camera->x++;
+	while (camera_infringes(camera, RIGHT))
+		camera->x--;
 }
 
 
