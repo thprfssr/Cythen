@@ -78,29 +78,13 @@ void play()
 			     SDL_MapRGB(game_screen->format,
 					0x00, 0x00, 0xff));
 
-		//draw_region(0, game_screen, tile_atlas);
-
-		//move_camera(region);
-		//x = get_camera_x();
-		//y = get_camera_y();
-		//camera_view(region->surface, game_screen, x, y);
-		
-		//draw_region(region, tile_atlas);
-		//control_character(protagonist);
-		//draw_character(protagonist, region);
-		
-		//draw_region_background(region, tile_atlas);
-		//update_region(region);
+		/* Do not change the order of these functions. Otherwise, jumpy
+		 * motion will be produced. */
 		clear_region(region);
+		control_character(character);
 		draw_character(character, region);
-		//control_character(character);
-		
 		center_camera(camera);
 		camera_view(camera, game_screen);
-		control_character(character);
-		/* First call camera_view and THEN call control_character,
-		 * because otherwise, you will produce jumpy motion when the
-		 * character moves. Why? I have no idea, it just works. */
 
 		if (is_on_title && !is_button_pressed(BUTTON_START))
 		{
