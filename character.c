@@ -2,6 +2,7 @@
 #include "tiles.h"
 #include "character.h"
 #include "controls.h"
+#include "camera.h"
 
 character_t *create_character(double x, double y, int h, int w)
 {
@@ -92,7 +93,55 @@ void control_character(character_t *character)
 	bool down = is_button_pressed(BUTTON_DOWN);
 	bool left = is_button_pressed(BUTTON_LEFT);
 	bool right = is_button_pressed(BUTTON_RIGHT);
+	
+	int buttons = (up << 0) | (down << 1) | (left << 2) | (right << 3);
 
+	switch (buttons)
+	{
+		case UP:
+			character->y -= CHARACTER_SPEED;
+			break;
+		case DOWN:
+			character->y += CHARACTER_SPEED;
+			break;
+		case LEFT:
+			character->x -= CHARACTER_SPEED;
+			break;
+		case RIGHT:
+			character->x += CHARACTER_SPEED;
+			break;
+		case UP | LEFT:
+			character->x -= CHARACTER_SPEED / sqrt(2);
+			character->y -= CHARACTER_SPEED / sqrt(2);
+			break;
+		case UP | RIGHT:
+			character->x += CHARACTER_SPEED / sqrt(2);
+			character->y -= CHARACTER_SPEED / sqrt(2);
+			break;
+		case DOWN | LEFT:
+			character->x -= CHARACTER_SPEED / sqrt(2);
+			character->y += CHARACTER_SPEED / sqrt(2);
+			break;
+		case DOWN | RIGHT:
+			character->x += CHARACTER_SPEED / sqrt(2);
+			character->y += CHARACTER_SPEED / sqrt(2);
+			break;
+		case DOWN | LEFT | RIGHT:
+			character->y += CHARACTER_SPEED;
+			break;
+		case UP | LEFT | RIGHT:
+			character->y -= CHARACTER_SPEED;
+			break;
+		case UP | DOWN | RIGHT:
+			character->x += CHARACTER_SPEED;
+			break;
+		case UP | DOWN | LEFT:
+			character->x -= CHARACTER_SPEED;
+			break;
+		default:
+			break;
+	}
+/*
 	if (up && left)
 	{
 		character->x -= CHARACTER_SPEED / sqrt(2);
@@ -124,4 +173,5 @@ void control_character(character_t *character)
 		if (right)
 			character->x += CHARACTER_SPEED;
 	}
+*/
 }
