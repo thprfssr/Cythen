@@ -3,7 +3,7 @@
 #include "character.h"
 #include "controls.h"
 
-character_t *create_character(int x, int y, int h, int w)
+character_t *create_character(double x, double y, int h, int w)
 {
 	character_t *character = malloc(sizeof(character_t));
 	character->x = x;
@@ -17,8 +17,8 @@ character_t *create_character(int x, int y, int h, int w)
 void draw_character(character_t *character, region_t *region)
 {
 	SDL_Rect *rect = malloc(sizeof(SDL_Rect));
-	rect->x = character->x;
-	rect->y = character->y;
+	rect->x = (int) floor(character->x);
+	rect->y = (int) floor(character->y);
 	rect->h = character->h;
 	rect->w = character->w;
 
@@ -30,22 +30,22 @@ void draw_character(character_t *character, region_t *region)
 
 void move_character_up(character_t *character)
 {
-	character->y--;
+	character->y -= CHARACTER_SPEED;
 }
 
 void move_character_down(character_t *character)
 {
-	character->y++;
+	character->y += CHARACTER_SPEED;
 }
 
 void move_character_left(character_t *character)
 {
-	character->x--;
+	character->x -= CHARACTER_SPEED;
 }
 
 void move_character_right(character_t *character)
 {
-	character->x++;
+	character->x += CHARACTER_SPEED;
 }
 
 void control_character(character_t *character)

@@ -1,15 +1,17 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
+#define CHARACTER_SPEED (1.5)
+
 typedef struct
 {
-	int x;
-	int y;
+	double x;
+	double y;
 	int w;
 	int h;
 } character_t;
 
-character_t *create_character(int x, int y, int w, int h);
+character_t *create_character(double x, double y, int w, int h);
 void draw_character(character_t *character, region_t *region);
 
 void move_character_up(character_t *character);

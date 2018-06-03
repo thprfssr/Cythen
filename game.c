@@ -55,7 +55,7 @@ void play()
 	region_t *region = create_region(0, tile_atlas);
 	//camera_t *camera = create_camera(region, 0, 0);
 	//character_t *protagonist = character_init(100, 60, 16, 16);
-	character_t *character = create_character(100, 60, 16, 16);
+	character_t *character = create_character(100, 60.5, 16, 16);
 	camera_t *camera = create_camera(region, 0, 0, character);
 
 	SDL_Event event;
@@ -95,6 +95,7 @@ void play()
 		draw_character(character, region);
 		control_character(character);
 		
+		center_camera(camera);
 		camera_view(camera, game_screen);
 
 		if (is_on_title && !is_button_pressed(BUTTON_START))

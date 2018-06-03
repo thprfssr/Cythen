@@ -31,6 +31,7 @@ void move_camera(camera_t *camera, int direction);
 //void update_camera_collision(camera_t *camera);
 bool camera_collision(camera_t *camera, int direction);
 void camera_view(camera_t *camera, SDL_Surface *game_screen);
+void center_camera(camera_t *camera);
 
 
 //void camera_view(SDL_Surface *src, SDL_Surface *dst, int x, int y);

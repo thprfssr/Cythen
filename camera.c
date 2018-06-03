@@ -148,6 +148,34 @@ void camera_view(camera_t *camera, SDL_Surface *game_screen)
 	//printf("%s\n", SDL_GetError());
 }
 
+/* This function centers the camera on the character whenever it doesn't
+ * collide with the region boundaries. */
+void center_camera(camera_t *camera)
+{
+	/* These are the coordinates of the respective centers of the camera
+	 * and the character. */
+	int cam_x = camera->x + SCREEN_WIDTH / 2;
+	int cam_y = camera->y + SCREEN_HEIGHT / 2;
+	int char_x = ((int) floor(camera->character->x)) + camera->character->w / 2;
+	int char_y = ((int) floor(camera->character->y)) + camera->character->h / 2;
+
+	/* If the character is left of the camera center... */
+	while (char_x < cam_x && !camera_collision(camera, LEFT))
+		cam_x--;
+	/* Else if the character is to the right of the camera center... */
+	while (char_x > cam_x && !camera_collision(camera, RIGHT))
+		cam_x++;
+	/* If the character is above the camera center... */
+	while (char_y < cam_y && !camera_collision(camera, UP))
+		cam_y--;
+	/* Else if the character is below the camera center... */
+	while (char_y > cam_y && !camera_collision(camera, DOWN))
+		cam_y++;
+
+	camera->x = cam_x - SCREEN_WIDTH / 2;
+	camera->y = cam_y - SCREEN_HEIGHT / 2;
+}
+
 
 /* Since regions are usually larger than our gamescreen, we can only show
  * part of them. Assuming that dst is our gamescreen, a.k.a. our "camera",
