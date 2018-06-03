@@ -44,7 +44,7 @@ void move_camera(region_t *region)
 }
 */
 
-camera_t *create_camera(region_t *region, int x, int y, character_t *character)
+camera_t *create_camera(region_t *region, double x, double y, character_t *character)
 {
 	camera_t *camera = malloc(sizeof(camera_t));
 
@@ -57,6 +57,16 @@ camera_t *create_camera(region_t *region, int x, int y, character_t *character)
 					       32, 0, 0, 0, 0);
 
 	return camera;
+}
+
+int camera_get_x(camera_t *camera)
+{
+	return (int) round(camera->x);
+}
+
+int camera_get_y(camera_t *camera)
+{
+	return (int) round(camera->y);
 }
 
 void move_camera(camera_t *camera, int direction)
@@ -101,8 +111,8 @@ void update_camera_collision(camera_t *camera)
 bool camera_collision(camera_t *camera, int direction)
 {
 	/* Just declaring these for simplicity. */
-	int x = camera->x;
-	int y = camera->y;
+	int x = camera_get_x(camera);
+	int y = camera_get_y(camera);
 	int hs = SCREEN_HEIGHT;
 	int ws = SCREEN_WIDTH;
 	int hr = camera->region->height * TILE_PIXEL_HEIGHT;
@@ -139,8 +149,8 @@ bool camera_collision(camera_t *camera, int direction)
 bool camera_infringes(camera_t *camera, int direction)
 {
 	/* Just declaring these for simplicity. */
-	int x = camera->x;
-	int y = camera->y;
+	int x = camera_get_x(camera);
+	int y = camera_get_y(camera);
 	int hs = SCREEN_HEIGHT;
 	int ws = SCREEN_WIDTH;
 	int hr = camera->region->height * TILE_PIXEL_HEIGHT;
@@ -178,8 +188,8 @@ bool camera_infringes(camera_t *camera, int direction)
 void camera_view(camera_t *camera, SDL_Surface *game_screen)
 {
 	SDL_Rect *rect = malloc(sizeof(SDL_Rect));
-	rect->x = camera->x;
-	rect->y = camera->y;
+	rect->x = camera_get_x(camera);
+	rect->y = camera_get_y(camera);
 	rect->w = SCREEN_WIDTH;
 	rect->h = SCREEN_HEIGHT;
 
@@ -193,35 +203,64 @@ void center_camera(camera_t *camera)
 {
 	/* These are the coordinates of the respective centers of the camera
 	 * and the character. */
-	int cam_x = camera->x + SCREEN_WIDTH / 2;
-	int cam_y = camera->y + SCREEN_HEIGHT / 2;
-	int char_x = ((int) ceil(camera->character->x)) + camera->character->w / 2;
-	int char_y = ((int) ceil(camera->character->y)) + camera->character->h / 2;
+	//int cam_x = camera_get_x(camera) + SCREEN_WIDTH / 2;
+	//int cam_y = camera_get_y(camera) + SCREEN_HEIGHT / 2;
+	//int char_x = character_get_x(camera->character) + camera->character->w / 2;
+	//int char_y = character_get_y(camera->character) + camera->character->h / 2;
 
+/*
+	double cam_x = camera->x + SCREEN_WIDTH / 2;
+	double cam_y = camera->y + SCREEN_HEIGHT / 2;
+	double char_x = camera->character->x + camera->character->w / 2;
+	double char_y = camera->character->y + camera->character->h / 2;
+*/
 	/* If the character is left of the camera center... */
-	while (char_x < cam_x && !camera_collision(camera, LEFT))
-		cam_x--;
+	//while (char_x < cam_x && !camera_collision(camera, LEFT))
+	//	cam_x -= 0.1;
 	/* Else if the character is to the right of the camera center... */
-	while (char_x > cam_x && !camera_collision(camera, RIGHT))
-		cam_x++;
+	//while (char_x > cam_x && !camera_collision(camera, RIGHT))
+	//	cam_x += 0.1;
 	/* If the character is above the camera center... */
-	while (char_y < cam_y && !camera_collision(camera, UP))
-		cam_y--;
+	//while (char_y < cam_y && !camera_collision(camera, UP))
+	//	cam_y -= 0.1;
 	/* Else if the character is below the camera center... */
-	while (char_y > cam_y && !camera_collision(camera, DOWN))
-		cam_y++;
+	//while (char_y > cam_y && !camera_collision(camera, DOWN))
+	//	cam_y += 0.1;
 
-	camera->x = cam_x - SCREEN_WIDTH / 2;
-	camera->y = cam_y - SCREEN_HEIGHT / 2;
+/*
+	if (char_x <= cam_x && !camera_collision(camera, LEFT))
+		cam_x = char_x;
+	if (char_x >= cam_x && !camera_collision(camera, RIGHT))
+		cam_x = char_x;
+	if (char_y <= cam_y && !camera_collision(camera, UP))
+		cam_y = char_y;
+	if (char_y >= cam_y && !camera_collision(camera, DOWN))
+		cam_y = char_y;
+*/
+	//cam_x = char_x;
+	//cam_y = char_y;
+
+	//camera->x = cam_x - SCREEN_WIDTH / 2;
+	//camera->y = cam_y - SCREEN_HEIGHT / 2;
+
+	double char_x = camera->character->x;
+	double char_y = camera->character->y;
+	double char_w = camera->character->w;
+	double char_h = camera->character->h;
+	double cam_w = SCREEN_WIDTH;
+	double cam_h = SCREEN_HEIGHT;
+
+	camera->x = char_x + (char_w - cam_w) / 2;
+	camera->y = char_y + (char_h - cam_h) / 2;
 
 	while (camera_infringes(camera, UP))
-		camera->y++;
+		camera->y += 1 - (CHARACTER_SPEED - floor(CHARACTER_SPEED));
 	while (camera_infringes(camera, DOWN))
-		camera->y--;
+		camera->y -= 1 - (CHARACTER_SPEED - floor(CHARACTER_SPEED));
 	while (camera_infringes(camera, LEFT))
-		camera->x++;
+		camera->x += 1 - (CHARACTER_SPEED - floor(CHARACTER_SPEED));
 	while (camera_infringes(camera, RIGHT))
-		camera->x--;
+		camera->x -= 1 - (CHARACTER_SPEED - floor(CHARACTER_SPEED));
 }
 
 

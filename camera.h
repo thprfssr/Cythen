@@ -15,8 +15,8 @@
 
 typedef struct
 {
-	int x;
-	int y;
+	double x;
+	double y;
 	region_t *region;
 	character_t *character;
 	SDL_Surface *surface;
@@ -26,7 +26,7 @@ typedef struct
 	//int collision;
 } camera_t;
 
-camera_t *create_camera(region_t *region, int x, int y, character_t *character);
+camera_t *create_camera(region_t *region, double x, double y, character_t *character);
 void move_camera(camera_t *camera, int direction);
 //void update_camera_collision(camera_t *camera);
 bool camera_collision(camera_t *camera, int direction);

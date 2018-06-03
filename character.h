@@ -14,6 +14,8 @@ typedef struct
 character_t *create_character(double x, double y, int w, int h);
 void draw_character(character_t *character, region_t *region);
 
+int character_get_x(character_t *character);
+int character_get_y(character_t *character);
 void move_character_up(character_t *character);
 void move_character_down(character_t *character);
 void move_character_left(character_t *character);

@@ -14,11 +14,21 @@ character_t *create_character(double x, double y, int h, int w)
 	return character;
 }
 
+int character_get_x(character_t *character)
+{
+	return (int) round(character->x);
+}
+
+int character_get_y(character_t *character)
+{
+	return (int) round(character->y);
+}
+
 void draw_character(character_t *character, region_t *region)
 {
 	SDL_Rect *rect = malloc(sizeof(SDL_Rect));
-	rect->x = (int) floor(character->x);
-	rect->y = (int) floor(character->y);
+	rect->x = character_get_x(character);
+	rect->y = character_get_y(character);
 	rect->h = character->h;
 	rect->w = character->w;
 
