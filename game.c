@@ -93,10 +93,14 @@ void play()
 		//update_region(region);
 		clear_region(region);
 		draw_character(character, region);
-		control_character(character);
+		//control_character(character);
 		
 		center_camera(camera);
 		camera_view(camera, game_screen);
+		control_character(character);
+		/* First call camera_view and THEN call control_character,
+		 * because otherwise, you will produce jumpy motion when the
+		 * character moves. Why? I have no idea, it just works. */
 
 		if (is_on_title && !is_button_pressed(BUTTON_START))
 		{
