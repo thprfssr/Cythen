@@ -17,7 +17,7 @@ typedef struct
 	int width;
 	int height;
 	int *layout;
-	int *walkability;
+	bool *walkability;
 	SDL_Surface *background; //This is where the tiles are drawn.
 	//SDL_Surface *foreground; //This is where the entities go.
 	SDL_Surface *ground;

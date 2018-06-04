@@ -94,6 +94,7 @@ region_t *create_region(int region_id, SDL_Surface *tile_atlas)
 	region->height = get_line_count(file);
 	region->width = i / region->height;
 	region->layout = tile_layout;
+	region->walkability = walkability;
 
 	int region_pixel_width = region->width * TILE_PIXEL_WIDTH;
 	int region_pixel_height = region->height * TILE_PIXEL_HEIGHT;
