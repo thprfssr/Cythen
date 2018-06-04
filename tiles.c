@@ -191,8 +191,15 @@ int get_line_count(FILE *file)
 	return i;
 }
 
-bool get_walkability(region_t *region, int x, int y)
+bool get_tile_walkability(region_t *region, int x, int y)
 {
 	int w = region->width;
 	return region->walkability[x + w * y];
+}
+
+bool is_point_walkable(region_t *region, int x, int y)
+{
+	int w = TILE_PIXEL_WIDTH;
+	int h = TILE_PIXEL_HEIGHT;
+	return get_tile_walkability(region, x / w, y / h);
 }

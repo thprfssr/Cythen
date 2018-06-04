@@ -93,6 +93,7 @@ void control_character(character_t *character)
 		move_character_right(character);
 }
 */
+
 void control_character(character_t *character, region_t *region)
 {
 	bool up = is_button_pressed(BUTTON_UP);
@@ -105,59 +106,59 @@ void control_character(character_t *character, region_t *region)
 	switch (buttons)
 	{
 		case UP:
-			if (~character_collision(character, region, UP))
+			if (!character_collision(character, region, UP))
 				character->y -= CHARACTER_SPEED;
 			break;
 		case DOWN:
-			if (~character_collision(character, region, DOWN))
+			if (!character_collision(character, region, DOWN))
 				character->y += CHARACTER_SPEED;
 			break;
 		case LEFT:
-			if (~character_collision(character, region, LEFT))
+			if (!character_collision(character, region, LEFT))
 				character->x -= CHARACTER_SPEED;
 			break;
 		case RIGHT:
-			if (~character_collision(character, region, RIGHT))
+			if (!character_collision(character, region, RIGHT))
 				character->x += CHARACTER_SPEED;
 			break;
 		case UP | LEFT:
-			if (~character_collision(character, region, LEFT))
+			if (!character_collision(character, region, LEFT))
 				character->x -= CHARACTER_SPEED / sqrt(2);
-			if (~character_collision(character, region, UP))
+			if (!character_collision(character, region, UP))
 				character->y -= CHARACTER_SPEED / sqrt(2);
 			break;
 		case UP | RIGHT:
-			if (~character_collision(character, region, RIGHT))
+			if (!character_collision(character, region, RIGHT))
 				character->x += CHARACTER_SPEED / sqrt(2);
-			if (~character_collision(character, region, UP))
+			if (!character_collision(character, region, UP))
 				character->y -= CHARACTER_SPEED / sqrt(2);
 			break;
 		case DOWN | LEFT:
-			if (~character_collision(character, region, LEFT))
+			if (!character_collision(character, region, LEFT))
 				character->x -= CHARACTER_SPEED / sqrt(2);
-			if (~character_collision(character, region, DOWN))
+			if (!character_collision(character, region, DOWN))
 				character->y += CHARACTER_SPEED / sqrt(2);
 			break;
 		case DOWN | RIGHT:
-			if (~character_collision(character, region, RIGHT))
+			if (!character_collision(character, region, RIGHT))
 				character->x += CHARACTER_SPEED / sqrt(2);
-			if (~character_collision(character, region, DOWN))
+			if (!character_collision(character, region, DOWN))
 				character->y += CHARACTER_SPEED / sqrt(2);
 			break;
 		case DOWN | LEFT | RIGHT:
-			if (~character_collision(character, region, DOWN))
+			if (!character_collision(character, region, DOWN))
 				character->y += CHARACTER_SPEED / sqrt(2);
 			break;
 		case UP | LEFT | RIGHT:
-			if (~character_collision(character, region, UP))
+			if (!character_collision(character, region, UP))
 				character->y -= CHARACTER_SPEED / sqrt(2);
 			break;
 		case UP | DOWN | RIGHT:
-			if (~character_collision(character, region, RIGHT))
+			if (!character_collision(character, region, RIGHT))
 				character->x += CHARACTER_SPEED / sqrt(2);
 			break;
 		case UP | DOWN | LEFT:
-			if (~character_collision(character, region, LEFT))
+			if (!character_collision(character, region, LEFT))
 				character->x -= CHARACTER_SPEED / sqrt(2);
 			break;
 		default:
@@ -201,17 +202,22 @@ void control_character(character_t *character, region_t *region)
 bool character_collision(character_t *character, region_t *region, int direction)
 {
 	/* Here are the four sides of the hitbox. */
-	int hitbox_up = character_get_y(character) + character->hitbox_y;
-	int hitbox_down = hitbox_up + character->hitbox_h;
-	int hitbox_left = character_get_x(character) + character->hitbox_x;
-	int hitbox_right = hitbox_left + character->hitbox_w;
+	//int hitbox_up = character_get_y(character) + character->hitbox_y;
+	//int hitbox_down = hitbox_up + character->hitbox_h;
+	//int hitbox_left = character_get_x(character) + character->hitbox_x;
+	//int hitbox_right = hitbox_left + character->hitbox_w;
 
 	/* And here we "scale down" the coordinates so that we can work with
 	 * tile collisions. */
-	int up = hitbox_up / TILE_PIXEL_HEIGHT;
-	int down = hitbox_down / TILE_PIXEL_HEIGHT;
-	int left = hitbox_left / TILE_PIXEL_WIDTH;
-	int right = hitbox_right / TILE_PIXEL_WIDTH;
+	//int up = hitbox_up / TILE_PIXEL_HEIGHT;
+	//int down = hitbox_down / TILE_PIXEL_HEIGHT;
+	//int left = hitbox_left / TILE_PIXEL_WIDTH;
+	//int right = hitbox_right / TILE_PIXEL_WIDTH;
+
+	int x = character_get_x(character) + character->hitbox_x;
+	int y = character_get_y(character) + character->hitbox_y;
+	int w = character->hitbox_w;
+	int h = character->hitbox_h;
 
 	bool tmp = false;
 	/* We check the corners of the hitbox to see whether they are on an
@@ -219,20 +225,32 @@ bool character_collision(character_t *character, region_t *region, int direction
 	switch (direction)
 	{
 		case UP:
-			tmp = tmp || ~get_walkability(region, left, up);
-			tmp = tmp || ~get_walkability(region, right, up);
+			//tmp = tmp || !get_walkability(region, left, up);
+			//tmp = tmp || !get_walkability(region, right, up);
+			//return tmp;
+			for(int i = x + 2; i < x + w - 1; i++)
+				tmp = tmp || !is_point_walkable(region, i, y);
 			return tmp;
 		case DOWN:
-			tmp = tmp || ~get_walkability(region, left, down);
-			tmp = tmp || ~get_walkability(region, right, down);
+			//tmp = tmp || !get_walkability(region, left, down);
+			//tmp = tmp || !get_walkability(region, right, down);
+			//return tmp;
+			for(int i = x + 2; i < x + w - 1; i++)
+				tmp = tmp || !is_point_walkable(region, i, y + h);
 			return tmp;
 		case LEFT:
-			tmp = tmp || ~get_walkability(region, left, up);
-			tmp = tmp || ~get_walkability(region, left, down);
+			//tmp = tmp || !get_walkability(region, left, up);
+			//tmp = tmp || !get_walkability(region, left, down);
+			//return tmp;
+			for(int i = y + 2; i < y + h - 1; i++)
+				tmp = tmp || !is_point_walkable(region, x, i);
 			return tmp;
 		case RIGHT:
-			tmp = tmp || ~get_walkability(region, right, up);
-			tmp = tmp || ~get_walkability(region, right, down);
+			//tmp = tmp || !get_walkability(region, right, up);
+			//tmp = tmp || !get_walkability(region, right, down);
+			//return tmp;
+			for(int i = y + 2; i < y + h - 1; i++)
+				tmp = tmp || !is_point_walkable(region, x + w, i);
 			return tmp;
 	}
 }

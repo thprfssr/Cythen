@@ -29,7 +29,8 @@ typedef struct
 region_t *create_region(int region_id, SDL_Surface *tile_atlas);
 void draw_region_background(region_t *region, SDL_Surface *tile_atlas);
 //void update_region(region_t *region);
-bool get_walkability(region_t *region, int x, int y);
+bool get_tile_walkability(region_t *region, int x, int y);
+bool is_point_walkable(region_t *region, int x, int y);
 void clear_region(region_t *region);
 void destroy_region(region_t *region);
 
