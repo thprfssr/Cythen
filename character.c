@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <SDL2/SDL.h>
 #include "tiles.h"
 #include "character.h"
@@ -92,7 +93,7 @@ void control_character(character_t *character)
 		move_character_right(character);
 }
 */
-void control_character(character_t *character)
+void control_character(character_t *character, region_t *region)
 {
 	bool up = is_button_pressed(BUTTON_UP);
 	bool down = is_button_pressed(BUTTON_DOWN);
@@ -104,44 +105,60 @@ void control_character(character_t *character)
 	switch (buttons)
 	{
 		case UP:
-			character->y -= CHARACTER_SPEED;
+			if (~character_collision(character, region, UP))
+				character->y -= CHARACTER_SPEED;
 			break;
 		case DOWN:
-			character->y += CHARACTER_SPEED;
+			if (~character_collision(character, region, DOWN))
+				character->y += CHARACTER_SPEED;
 			break;
 		case LEFT:
-			character->x -= CHARACTER_SPEED;
+			if (~character_collision(character, region, LEFT))
+				character->x -= CHARACTER_SPEED;
 			break;
 		case RIGHT:
-			character->x += CHARACTER_SPEED;
+			if (~character_collision(character, region, RIGHT))
+				character->x += CHARACTER_SPEED;
 			break;
 		case UP | LEFT:
-			character->x -= CHARACTER_SPEED / sqrt(2);
-			character->y -= CHARACTER_SPEED / sqrt(2);
+			if (~character_collision(character, region, LEFT))
+				character->x -= CHARACTER_SPEED / sqrt(2);
+			if (~character_collision(character, region, UP))
+				character->y -= CHARACTER_SPEED / sqrt(2);
 			break;
 		case UP | RIGHT:
-			character->x += CHARACTER_SPEED / sqrt(2);
-			character->y -= CHARACTER_SPEED / sqrt(2);
+			if (~character_collision(character, region, RIGHT))
+				character->x += CHARACTER_SPEED / sqrt(2);
+			if (~character_collision(character, region, UP))
+				character->y -= CHARACTER_SPEED / sqrt(2);
 			break;
 		case DOWN | LEFT:
-			character->x -= CHARACTER_SPEED / sqrt(2);
-			character->y += CHARACTER_SPEED / sqrt(2);
+			if (~character_collision(character, region, LEFT))
+				character->x -= CHARACTER_SPEED / sqrt(2);
+			if (~character_collision(character, region, DOWN))
+				character->y += CHARACTER_SPEED / sqrt(2);
 			break;
 		case DOWN | RIGHT:
-			character->x += CHARACTER_SPEED / sqrt(2);
-			character->y += CHARACTER_SPEED / sqrt(2);
+			if (~character_collision(character, region, RIGHT))
+				character->x += CHARACTER_SPEED / sqrt(2);
+			if (~character_collision(character, region, DOWN))
+				character->y += CHARACTER_SPEED / sqrt(2);
 			break;
 		case DOWN | LEFT | RIGHT:
-			character->y += CHARACTER_SPEED / sqrt(2);
+			if (~character_collision(character, region, DOWN))
+				character->y += CHARACTER_SPEED / sqrt(2);
 			break;
 		case UP | LEFT | RIGHT:
-			character->y -= CHARACTER_SPEED / sqrt(2);
+			if (~character_collision(character, region, UP))
+				character->y -= CHARACTER_SPEED / sqrt(2);
 			break;
 		case UP | DOWN | RIGHT:
-			character->x += CHARACTER_SPEED / sqrt(2);
+			if (~character_collision(character, region, RIGHT))
+				character->x += CHARACTER_SPEED / sqrt(2);
 			break;
 		case UP | DOWN | LEFT:
-			character->x -= CHARACTER_SPEED / sqrt(2);
+			if (~character_collision(character, region, LEFT))
+				character->x -= CHARACTER_SPEED / sqrt(2);
 			break;
 		default:
 			break;
@@ -179,4 +196,43 @@ void control_character(character_t *character)
 			character->x += CHARACTER_SPEED;
 	}
 */
+}
+
+bool character_collision(character_t *character, region_t *region, int direction)
+{
+	/* Here are the four sides of the hitbox. */
+	int hitbox_up = character_get_y(character) + character->hitbox_y;
+	int hitbox_down = hitbox_up + character->hitbox_h;
+	int hitbox_left = character_get_x(character) + character->hitbox_x;
+	int hitbox_right = hitbox_left + character->hitbox_w;
+
+	/* And here we "scale down" the coordinates so that we can work with
+	 * tile collisions. */
+	int up = hitbox_up / TILE_PIXEL_HEIGHT;
+	int down = hitbox_down / TILE_PIXEL_HEIGHT;
+	int left = hitbox_left / TILE_PIXEL_WIDTH;
+	int right = hitbox_right / TILE_PIXEL_WIDTH;
+
+	bool tmp = false;
+	/* We check the corners of the hitbox to see whether they are on an
+	 * unwalkable tile. */
+	switch (direction)
+	{
+		case UP:
+			tmp = tmp || ~get_walkability(region, left, up);
+			tmp = tmp || ~get_walkability(region, right, up);
+			return tmp;
+		case DOWN:
+			tmp = tmp || ~get_walkability(region, left, down);
+			tmp = tmp || ~get_walkability(region, right, down);
+			return tmp;
+		case LEFT:
+			tmp = tmp || ~get_walkability(region, left, up);
+			tmp = tmp || ~get_walkability(region, left, down);
+			return tmp;
+		case RIGHT:
+			tmp = tmp || ~get_walkability(region, right, up);
+			tmp = tmp || ~get_walkability(region, right, down);
+			return tmp;
+	}
 }

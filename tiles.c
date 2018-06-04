@@ -190,3 +190,9 @@ int get_line_count(FILE *file)
 
 	return i;
 }
+
+bool get_walkability(region_t *region, int x, int y)
+{
+	int w = region->width;
+	return region->walkability[x + w * y];
+}

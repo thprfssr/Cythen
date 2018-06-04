@@ -81,7 +81,7 @@ void play()
 		/* Do not change the order of these functions. Otherwise, jumpy
 		 * motion will be produced. */
 		clear_region(region);
-		control_character(character);
+		control_character(character, region);
 		draw_character(character, region);
 		center_camera(camera);
 		camera_view(camera, game_screen);

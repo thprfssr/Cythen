@@ -2,6 +2,7 @@
 #define TILES_H
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <SDL2/SDL.h>
 
 #define TILE_PIXEL_WIDTH 16
@@ -28,6 +29,7 @@ typedef struct
 region_t *create_region(int region_id, SDL_Surface *tile_atlas);
 void draw_region_background(region_t *region, SDL_Surface *tile_atlas);
 //void update_region(region_t *region);
+bool get_walkability(region_t *region, int x, int y);
 void clear_region(region_t *region);
 void destroy_region(region_t *region);
 
