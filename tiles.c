@@ -66,16 +66,27 @@ region_t *create_region(int region_id, SDL_Surface *tile_atlas)
 	fread(file_contents, sizeof(char), file_size, file);
 	rewind(file);
 
+	//region->height = get_line_count(file);
+	//region->width = i / region->height;
+
 	int *tile_layout = NULL;
-	size_t size = 0;
+	bool *walkability = NULL;
+	size_t size_int = 0;
+	size_t size_bool = 0;
 	char *token;
 	token = strtok(file_contents, REGION_TILE_LAYOUT_DELIMITER);
 	int i = 0;
 	while (token != NULL)
 	{
-		size += sizeof(int);
-		tile_layout = realloc(tile_layout, size);
+		size_int += sizeof(int);
+		tile_layout = realloc(tile_layout, size_int);
 		tile_layout[i] = atoi(token);
+
+		int x = tile_layout[i] % TILE_ATLAS_WIDTH_IN_TILES;
+		int y = tile_layout[i] / TILE_ATLAS_WIDTH_IN_TILES;
+		size_bool += sizeof(bool);
+		walkability = realloc(walkability, size_bool);
+		walkability[i] = ((x + y) % 2 == 1);
 		token = strtok(NULL, REGION_TILE_LAYOUT_DELIMITER);
 		i++;
 	}

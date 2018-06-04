@@ -249,18 +249,35 @@ void center_camera(camera_t *camera)
 	double char_h = camera->character->h;
 	double cam_w = SCREEN_WIDTH;
 	double cam_h = SCREEN_HEIGHT;
+	double reg_w = camera->region->width * TILE_PIXEL_WIDTH;
+	double reg_h = camera->region->height * TILE_PIXEL_HEIGHT;
 
 	camera->x = char_x + (char_w - cam_w) / 2;
 	camera->y = char_y + (char_h - cam_h) / 2;
 
-	while (camera_infringes(camera, UP))
-		camera->y += 1 - (CHARACTER_SPEED - floor(CHARACTER_SPEED));
-	while (camera_infringes(camera, DOWN))
-		camera->y -= 1 - (CHARACTER_SPEED - floor(CHARACTER_SPEED));
-	while (camera_infringes(camera, LEFT))
-		camera->x += 1 - (CHARACTER_SPEED - floor(CHARACTER_SPEED));
-	while (camera_infringes(camera, RIGHT))
-		camera->x -= 1 - (CHARACTER_SPEED - floor(CHARACTER_SPEED));
+	/* This snippet of code makes sure that the camera does not go past the
+	 * region boundaries. However, if the region is smaller than the camera
+	 * along one axis, then this makes sure that the camera remains
+	 * centered on the region. */
+	if (cam_h <= reg_h)
+	{
+		while (camera_infringes(camera, UP))
+			camera->y += 1 - (CHARACTER_SPEED - floor(CHARACTER_SPEED));
+		while (camera_infringes(camera, DOWN))
+			camera->y -= 1 - (CHARACTER_SPEED - floor(CHARACTER_SPEED));
+	}
+	else
+		camera->y = (reg_h - cam_h) / 2;
+
+	if (cam_w <= reg_w)
+	{
+		while (camera_infringes(camera, LEFT))
+			camera->x += 1 - (CHARACTER_SPEED - floor(CHARACTER_SPEED));
+		while (camera_infringes(camera, RIGHT))
+			camera->x -= 1 - (CHARACTER_SPEED - floor(CHARACTER_SPEED));
+	}
+	else
+		camera->x = (reg_w - cam_w) / 2;
 }
 
 

@@ -9,9 +9,14 @@ typedef struct
 	double y;
 	int w;
 	int h;
+	int hitbox_x;
+	int hitbox_y;
+	int hitbox_w;
+	int hitbox_h;
 } character_t;
 
-character_t *create_character(double x, double y, int w, int h);
+character_t *create_character(double x, double y, int w, int h, int hitbox_x,
+			      int hitbox_y, int hitbox_w, int hitbox_h);
 void draw_character(character_t *character, region_t *region);
 
 int character_get_x(character_t *character);

@@ -4,13 +4,18 @@
 #include "controls.h"
 #include "camera.h"
 
-character_t *create_character(double x, double y, int h, int w)
+character_t *create_character(double x, double y, int h, int w, int hitbox_x,
+			      int hitbox_y, int hitbox_w, int hitbox_h)
 {
 	character_t *character = malloc(sizeof(character_t));
 	character->x = x;
 	character->y = y;
 	character->h = h;
 	character->w = w;
+	character->hitbox_x = hitbox_x;
+	character->hitbox_y = hitbox_y;
+	character->hitbox_w = hitbox_w;
+	character->hitbox_h = hitbox_h;
 
 	return character;
 }
@@ -127,16 +132,16 @@ void control_character(character_t *character)
 			character->y += CHARACTER_SPEED / sqrt(2);
 			break;
 		case DOWN | LEFT | RIGHT:
-			character->y += CHARACTER_SPEED;
+			character->y += CHARACTER_SPEED / sqrt(2);
 			break;
 		case UP | LEFT | RIGHT:
-			character->y -= CHARACTER_SPEED;
+			character->y -= CHARACTER_SPEED / sqrt(2);
 			break;
 		case UP | DOWN | RIGHT:
-			character->x += CHARACTER_SPEED;
+			character->x += CHARACTER_SPEED / sqrt(2);
 			break;
 		case UP | DOWN | LEFT:
-			character->x -= CHARACTER_SPEED;
+			character->x -= CHARACTER_SPEED / sqrt(2);
 			break;
 		default:
 			break;
