@@ -60,23 +60,24 @@ bool get_tile_atlas_walkability(int n)
 	fread(file_contents, sizeof(char), file_size, file);
 	rewind(file);
 
-	bool walkability = true;
-	//char *token;
-	//token = strtok(file_contents, REGION_TILE_LAYOUT_DELIMITER);
-/*
+	bool walkability;
+	char *token;
+	char *save_ptr = NULL; //we need this buffer for strtok_r
+	token = strtok_r(file_contents, REGION_TILE_LAYOUT_DELIMITER, &save_ptr);
 	int i = 0;
 	while (token != NULL)
 	{
 		if (i == n)
 		{
-			walkability = (token == "1");
+			walkability = (bool) atoi(token);
+			printf("%s\n", token);
 			break;
 		}
-		token = strtok(NULL, REGION_TILE_LAYOUT_DELIMITER);
+		token = strtok_r(NULL, REGION_TILE_LAYOUT_DELIMITER, &save_ptr);
 		i++;
 	}
-*/
 
+/*
 	int i = 0;
 	int j = 0;
 	while ( i < file_size / sizeof(char))
@@ -91,6 +92,7 @@ bool get_tile_atlas_walkability(int n)
 			j++;
 		i++;
 	}
+*/
 
 	fclose(file);
 	free(file_contents);
