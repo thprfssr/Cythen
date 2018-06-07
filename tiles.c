@@ -70,7 +70,6 @@ bool get_tile_atlas_walkability(int n)
 		if (i == n)
 		{
 			walkability = (bool) atoi(token);
-			printf("%s\n", token);
 			break;
 		}
 		token = strtok_r(NULL, REGION_TILE_LAYOUT_DELIMITER, &save_ptr);
