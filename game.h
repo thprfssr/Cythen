@@ -10,6 +10,7 @@
 #define DESIRED_FPS 60
 
 #define TILE_ATLAS_PATH "resources/tile_atlas.png"
+#define TILE_WALKABILITY_PATH "resources/tile_walkability.txt"
 #define TITLE_SCREEN_PATH "resources/title_screen.png"
 
 bool g_is_quitting;

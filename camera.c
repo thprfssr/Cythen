@@ -297,3 +297,29 @@ void camera_view(SDL_Surface *src, SDL_Surface *dst, int x, int y)
 
 	SDL_BlitSurface(src, &src_rect, dst, NULL);
 }*/
+
+/* Notice that we concern ourselves not with the character's hitbox, but with
+ * their actual frame. This is because we will use this function for the
+ * transition between regions. */
+bool is_character_on_camera_edge(camera_t *camera, int direction)
+{
+	int x = (int) round(camera->character->x - camera->x);
+	int y = (int) round(camera->character->y - camera->y);
+	int w = camera->character->w;
+	int h = camera->character->h;
+	int cam_w = SCREEN_WIDTH;
+	int cam_h = SCREEN_HEIGHT;
+
+	switch (direction)
+	{
+		case UP:
+			return y == 0;
+		case DOWN:
+			return y + h == cam_h;
+		case LEFT:
+			return x == 0;
+		case RIGHT:
+			return x + w == cam_w;
+		default: break;
+	}
+}

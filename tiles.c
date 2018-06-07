@@ -41,6 +41,62 @@ SDL_Surface *load_tile(SDL_Surface *tile_atlas, int tile_position)
 	return dst_surface;
 }
 
+bool get_tile_atlas_walkability(int n)
+{
+	char *file_contents;
+	long file_size;
+	FILE *file = NULL;
+
+	if ((file = fopen(TILE_WALKABILITY_PATH, "r")) == NULL)
+	{
+		printf("Could not open walkability file!\n");
+		exit(-1);
+	}
+
+	fseek(file, 0, SEEK_END);
+	file_size = ftell(file);
+	rewind(file);
+	file_contents = malloc(file_size * sizeof(char));
+	fread(file_contents, sizeof(char), file_size, file);
+	rewind(file);
+
+	bool walkability = true;
+	//char *token;
+	//token = strtok(file_contents, REGION_TILE_LAYOUT_DELIMITER);
+/*
+	int i = 0;
+	while (token != NULL)
+	{
+		if (i == n)
+		{
+			walkability = (token == "1");
+			break;
+		}
+		token = strtok(NULL, REGION_TILE_LAYOUT_DELIMITER);
+		i++;
+	}
+*/
+
+	int i = 0;
+	int j = 0;
+	while ( i < file_size / sizeof(char))
+	{
+		if (j == n)
+		{
+			walkability = (file_contents[i] == '1');
+			break;
+		}
+
+		if (file_contents[i] == '1' || file_contents[i] == '1')
+			j++;
+		i++;
+	}
+
+	fclose(file);
+	free(file_contents);
+	return walkability;
+}
+
 /* NOTE: Whenever you call this function,
  * remember to destroy the region afterwards. */
 /* NOTE: This function almost made me insane when I was debugging it.
@@ -86,7 +142,7 @@ region_t *create_region(int region_id, SDL_Surface *tile_atlas)
 		int y = tile_layout[i] / TILE_ATLAS_WIDTH_IN_TILES;
 		size_bool += sizeof(bool);
 		walkability = realloc(walkability, size_bool);
-		walkability[i] = ((x + y) % 2 == 1);
+		walkability[i] = get_tile_atlas_walkability(tile_layout[i]); //((x + y) % 2 == 1);
 		token = strtok(NULL, REGION_TILE_LAYOUT_DELIMITER);
 		i++;
 	}

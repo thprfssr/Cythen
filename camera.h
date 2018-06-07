@@ -33,6 +33,7 @@ bool camera_collision(camera_t *camera, int direction);
 bool camera_infringes(camera_t *camera, int direction);
 void camera_view(camera_t *camera, SDL_Surface *game_screen);
 void center_camera(camera_t *camera);
+bool is_character_on_camera_edge(camera_t *camera, int direction);
 
 
 //void camera_view(SDL_Surface *src, SDL_Surface *dst, int x, int y);

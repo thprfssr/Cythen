@@ -27,6 +27,7 @@ typedef struct
 } region_t;
 
 region_t *create_region(int region_id, SDL_Surface *tile_atlas);
+bool get_tile_atlas_walkability(int n);
 void draw_region_background(region_t *region, SDL_Surface *tile_atlas);
 //void update_region(region_t *region);
 bool get_tile_walkability(region_t *region, int x, int y);
